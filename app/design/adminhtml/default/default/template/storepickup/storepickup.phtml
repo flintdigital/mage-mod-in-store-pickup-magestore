@@ -1,0 +1,92 @@
+<?php
+$order = $this->getOrder();
+$orderId = $order->getId();
+
+$shipping_time = $this->getShippingTime($orderId);
+$shipping_date = $this->getShippingDate($orderId);
+if ($shipping_date !='0000-00-00')
+{
+	$shipping_date = str_replace('-','/',$shipping_date);
+	$shipping_date = date('m-d-Y',strtotime($shipping_date ));
+} else {
+	$shipping_date = null;
+}
+$storepickup = $this->getStorepickup();
+if($storepickup)
+{
+?>
+<center>
+<div class="box-left">
+	<div class="entry-edit">
+		<div class="entry-edit-head">
+			<h4 class="icon-head head-account"><?php echo $this->__('Store Information')?></h4>
+		</div>
+		<div class="fieldset">
+			<table class="form-list" cellspacing="0">
+				<tr>
+					<td class="label"><label><?php echo $this->__('Name') ?></label></td>
+					<td><strong><?php echo $storepickup->getData('store_name')?></strong></td>
+				</tr>
+				<tr>
+					<td class="label"><label><?php echo $this->__('Address') ?></label></td>
+					<td><strong><?php echo $storepickup->getData('address')?></strong></td>
+				</tr>
+				<tr>
+					<td class="label"><label><?php echo $this->__('City') ?></label></td>
+					<td><strong><?php echo $storepickup->getCity()?></strong></td>
+				</tr>
+				<tr>
+					<td class="label"><label><?php echo $this->__('State/Province') ?></label></td>
+					<td><strong><?php echo $storepickup->getData('state') ?></strong></td>
+				</tr>
+				<tr>
+					<td class="label"><label><?php echo $this->__('Zipcode') ?></label></td>
+					<td><strong><?php echo $storepickup->getData('zipcode')?></strong></td>
+				</tr>				
+				<tr>
+					<td class="label"><label><?php echo $this->__('Country') ?></label></td>
+					<td><strong><?php echo $storepickup->getCountryName() ?></strong></td>
+				</tr>				
+			</table>
+			<div>	
+				<!-- IMAGE -->
+				<?php 
+					$store = Mage::helper('storepickup')->getStorepickupByOrderId($order->getId());
+					if ($store) {
+						$latitude = $store->getStoreLatitude();
+						$longitude = $store->getStoreLongitude();
+						if($latitude !=0 && $longitude !=0) {
+				?>
+				<div>
+					<img src=<?php echo "http://maps.google.com/maps/api/staticmap?center=".$latitude.",".$longitude."&zoom=15&size=400x400&markers=color:red|label:S|".$latitude.",".$longitude."&sensor=false" ?> />
+				</div>
+				<?php }} ?>
+				<!-- -->
+			</div>
+		</div>
+	</div>
+</div>
+<?php if ($shipping_time !=null && $shipping_date !=null) { ?>
+<div class="box-right">
+	<div class="entry-edit">
+		<div class="entry-edit-head">
+			<h4 class="icon-head head-account"><?php echo $this->__('Delivery Time')?></h4>
+		</div>
+		<div class="fieldset">
+			<table class="form-list" cellspacing="0">
+				<tr>
+					<td class="label"><label><?php echo $this->__('Time') ?></label></td>
+					<td><strong><?php echo $shipping_time ?></strong></td>
+				</tr>
+				<tr>
+					<td class="label"><label><?php echo $this->__('Date') ?></label></td>
+					<td><strong><?php echo $shipping_date ?></strong></td>
+				</tr>			
+			</table>
+		</div>
+	</div>
+</div>
+</center>
+
+<?php } 
+}?>

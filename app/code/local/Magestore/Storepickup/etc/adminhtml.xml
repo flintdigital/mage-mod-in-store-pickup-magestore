@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <storepickup module="storepickup">
+            <title>Store Pickup</title>
+            <sort_order>70</sort_order>
+            <children>
+                <stores module="storepickup">
+                    <title>Manage Stores</title>
+                    <sort_order>0</sort_order>
+                    <action>adminhtml/storepickup_store</action>
+                    <icon>fa-institution</icon>
+                </stores>
+                <holidays module="storepickup">
+                    <title>Manage Holidays</title>
+                    <sort_order>1</sort_order>
+                    <action>adminhtml/storepickup_holiday</action>
+                    <icon>fa-calendar</icon>
+                </holidays>
+                <specialdays module="storepickup">
+                    <title>Manage Special Days</title>
+                    <sort_order>2</sort_order>
+                    <action>adminhtml/storepickup_specialday</action>
+                    <icon>fa-calendar-check-o</icon>
+                </specialdays>
+                <tag module="storepickup">
+                    <title>Manage Tags</title>
+                    <sort_order>4</sort_order>
+                    <action>adminhtml/storepickup_tag</action>
+                    <icon>fa-tag</icon>
+                </tag>
+                <guide module="storepickup">
+                    <title>Guide</title>
+                    <sort_order>8</sort_order>
+                    <action>adminhtml/storepickup_guide</action>
+                    <icon>fa-file-text-o</icon>
+                </guide>
+                <settings>
+                    <title>Settings</title>
+                    <sort_order>12</sort_order>
+                    <action>adminhtml/system_config/edit/section/carriers/storepickup/1</action>
+                    <icon>fa-cog</icon>
+                </settings>
+            </children>
+        </storepickup>
+    </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <storepickup module="storepickup" translate="title">
+                        <title>Store Pickup</title>
+                        <sort_order>70</sort_order>
+                        <children>
+                            <stores module="storepickup" translate="title">
+                                <title>Manage Stores</title>
+                                <sort_order>0</sort_order>
+                                <action>adminhtml/storepickup_store</action>
+                            </stores>
+                            <holidays module="storepickup" translate="title">
+                                <title>Manage Holidays</title>
+                                <sort_order>1</sort_order>
+                                <action>adminhtml/storepickup_holiday</action>
+                            </holidays>
+                            <specialdays module="storepickup" translate="title">
+                                <title>Guide</title>
+                                <sort_order>2</sort_order>
+                                <action>adminhtml/storepickup_specialday</action>
+                            </specialdays>
+                            <guide module="storepickup" translate="title">
+                                <title>Manage Special Days</title>
+                                <sort_order>3</sort_order>
+                                <action>adminhtml/storepickup_guide</action>
+                            </guide>
+                            <settings>
+                                <title>Settings</title>
+                                <sort_order>4</sort_order>
+                                <action>adminhtml/system_config/edit/section/carriers/storepickup/1</action>
+                            </settings>
+                        </children>
+                    </storepickup>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>
+

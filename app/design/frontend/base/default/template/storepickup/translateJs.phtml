@@ -1,0 +1,36 @@
+<?php 
+
+$dayNames = Mage::helper('storepickup')->translateDate(array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ));
+$dayNamesMin = Mage::helper('storepickup')->translateDate(array( "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" ));
+$monthNames = Mage::helper('storepickup')->translateDate(array( "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ));
+$monthNamesShort = Mage::helper('storepickup')->translateDate(array( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"));
+
+?>
+<script type="text/javascript">
+    var translateJson = {
+        fullMapTitle : '<?php echo $this->__("Full Screen") ?>',
+        normalMapTitle : '<?php echo $this->__("Exit Full Screen") ?>',
+        storeNotFound : '<?php echo $this->__("Store not found !") ?>',
+        errorGeoServiceFaild : '<?php echo $this->__("Error: The Geolocation service failed.") ?>',
+        errorBrowserSupport : '<?php echo $this->__("Error: Your browser does not support geolocation.") ?>',
+        direction : [
+            '<?php echo $this->__("At least one of the origin, destination, or waypoints could not be geocoded.") ?>', 
+            '<?php echo $this->__("The webpage has gone over the requests limit in too short a period of time.") ?>',
+            '<?php echo $this->__("The webpage is not allowed to use the directions service.") ?>',
+            '<?php echo $this->__("A directions request could not be processed due to a server error. The request may succeed if you try again.") ?>',
+            '<?php echo $this->__("No route could be found between the origin and destination.") ?>', 
+            '<?php echo $this->__("The webpage is not allowed to use the directions service.") ?>'
+        ],
+        pleaseChoose : '<?php echo $this->__("Please choose...") ?>',
+        numberStore : '<?php echo $this->__("Number of stores found :") ?>',
+        dayNames: <?php echo  Mage::helper('core')->jsonEncode($dayNames) ?>,
+        dayNamesMin: <?php echo  Mage::helper('core')->jsonEncode($dayNamesMin) ?>,
+        monthNames: <?php echo  Mage::helper('core')->jsonEncode($monthNames) ?>,
+        monthNamesShort: <?php echo  Mage::helper('core')->jsonEncode($monthNamesShort) ?>,
+        nextText: '<?php echo $this->__("Later") ?>',
+        prevText: '<?php echo $this->__("Earlier") ?>',
+        Select_store_by_map:'<?php echo $this->__("Select store by map") ?>',
+        Select_store:'<?php echo $this->__("Select store:") ?>',
+        Select_a_store_to_pickup:'<?php echo $this->__("Select a store to pickup.") ?>'
+    };
+</script>

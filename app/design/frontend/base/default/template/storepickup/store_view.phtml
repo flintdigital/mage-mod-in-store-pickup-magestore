@@ -1,0 +1,332 @@
+<script type="text/javascript" >
+    function tabs(selectedtab) {
+        // contents
+        var s_tab_content = "tab_content_" + selectedtab;
+        var contents = document.getElementsByTagName("div");
+        for (var x = 0; x < contents.length; x++) {
+            name = contents[x].getAttribute("name");
+            if (name == 'tab_content') {
+                if (contents[x].id == s_tab_content) {
+                    contents[x].style.display = "block";
+                } else {
+                    contents[x].style.display = "none";
+                }
+            }
+        }
+        // tabs
+        var s_tab = "tab_" + selectedtab;
+        var tabs = document.getElementsByTagName("a");
+        for (var x = 0; x < tabs.length; x++) {
+            name = tabs[x].getAttribute("name");
+            if (name == 'tab') {
+                if (tabs[x].id == s_tab) {
+                    tabs[x].className = "active";
+                } else {
+                    tabs[x].className = "";
+                }
+            }
+        }
+
+    }
+    function changeImage(element) {
+        document.getElementById('image').src = element.src;
+    }
+</script>
+
+<?php $store_id = $this->getRequest()->getParam('viewstore'); ?>
+<?php $storeInfo = $this->getStoreById($store_id); ?>
+<div class="storepickup-list">
+    <div class="page-title">
+        <h1><?php echo $this->__('Store Details'); ?></h1>
+        <p class="store-back">
+            <a class="product-link"  href="<?php echo Mage::helper('storepickup')->getStoresUrl(); ?>" title="Back">Back</a>
+        </p>
+        <p style="margin-top: 10px;">
+            <?php
+            $helper = Mage::helper('cms');
+            $processor = $helper->getBlockTemplateProcessor();
+            $html = $processor->filter($storeInfo->getDescription());
+            echo $html;
+            ?>
+        </p>
+    </div>
+    <div class="store-view-container">
+        <div id="store-pickup-map-box"  class="store-pickup-map-box col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+            <div class="store-map col-lg-12 col-md-12 col-sm-12 col-xs-12" id="store_map">
+            </div>
+            <?php echo  $this->getLayout()->createBlock('core/template')->setTemplate('storepickup/googlemap/liststorebox.phtml')->toHtml();?>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 30px; padding: 0;">
+            <div class="tab-wrap-store">
+                <div class="tabs">
+                    <ul>
+                        <li><a name="tab" id="tab_1" href="javascript:void(0)" onClick="tabs(1)" class="active">Store Information</a></li>
+                        <li><a name="tab" id="tab_2" href="javascript:void(0)" onClick="tabs(2)">Special day &amp; holiday information</a></li>
+                        <li><a name="tab" id="tab_3" href="javascript:void(0)" onClick="tabs(3)">Contact Store</a></li>
+                    </ul>
+                </div>
+
+                <div name="tab_content" id="tab_content_1" class="tab_content active">
+
+                    <?php if ($storeInfo): ?>
+                        <h3><?php echo $storeInfo->getStoreName() ?></h3>
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin-top:30px; padding: 0;">
+                                <table class="table table-bordered" style="margin-top:1px;">
+                                    <tr>
+                                        <td class="label-sto"><?php echo $this->__('Address:'); ?></td>
+                                        <td><?php echo $storeInfo->getAddress(); ?> <?php if ($storeInfo->getState()) echo ', ' . $storeInfo->getState(); ?> <?php if ($storeInfo->getCity()) echo ', ' . $storeInfo->getCity(); ?>
+                                            <br/>
+                                            <?php echo $this->getCountryName($storeInfo->getCountry()); ?> <?php echo $storeInfo->getZipcode(); ?>
+                                        </td>
+                                    </tr>
+                                    <?php $fieldNames = array('Phone' => 'store_phone', 'Email' => 'store_mail', 'Fax' => 'store_fax', 'State/Province' => 'state'); ?>
+                                    <?php foreach ($fieldNames as $label => $fieldName): ?>
+                                        <?php if ($storeInfo->getData($fieldName)): ?>
+                                            <tr>
+                                                <td class="label-sto"><?php echo $this->__($label) . ':'; ?></td>
+                                                <td><?php echo $storeInfo->getData($fieldName); ?></td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                    <tr>
+                                        <td class="label-sto"><?php echo $this->__('Working Time:'); ?></td>
+                                        <td>
+                                            <table>
+                                                <?php if (Mage::helper('storepickup')->getTimeFormat() == '12'): ?>
+                                                <?php echo $this->getWorkingTime($storeInfo,"g:i A");?>
+                                                <?php else: ?>
+                                                <?php echo $this->getWorkingTime($storeInfo,"G:i");?>
+                                                <?php endif; ?>
+                                            </table>
+
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-lg-5 col-lg-offset-1 col-md-5 col-md-offset-1 col-sm-5 col-sm-offset-1 col-xs-12 slide-img">
+                                <?php $images = $this->getImagebyStore($store_id); ?>
+                                <?php if (count($images)): ?>
+                                    <div class="store-pickup-column-left" style="width:auto; padding-left:0px; ">
+                                        <h4 class="store-pickup-title"><?php echo $this->__('Images of Store ' . $storeInfo->getStoreName()); ?></h4>
+                                        <div class="locator-main-outer">
+                                            <div class ="store-pickup-image-main">
+                                                <?php $image_big = Mage::helper('storepickup')->getBigImagebyStore($store_id); ?>
+                                                <?php
+                                                //zend_debug::dump($image_big);
+                                                //die();
+                                                ?>
+                                                <a class="magestore-map-image" title="" href="javascript:void(0)">
+                                                    <img id="image" src="<?php echo $image_big; ?>" width="450px" hieght="253px">
+                                                </a>
+
+                                            </div>
+                                            <div class="more-views">
+                                                <h2>More Views</h2>
+                                                <div class="more-view-slide">
+                                                    <ul>
+                                                        <?php foreach ($images as $item): ?>
+                                                            <li>
+                                                                <a class="locator-image-small" title=""  href="javascript:void(0)">
+                                                                    <img onclick="changeImage(this)" width="57" height="56" alt="" src="<?php echo $item; ?>">
+                                                                </a>
+                                                            </li>
+                                                        <?php endforeach; ?>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                    <?php endif; ?>
+
+                </div>
+                <div name="tab_content" id="tab_content_2" class="tab_content">
+                    <div id="store-pickup-shday">
+                        <div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <?php $spencialDays = Mage::helper('storepickup')->getSpecialDays($store_id); ?>
+
+                                <div id="open_hour_special_day">
+                                    <h3 class="open_hour_title"><?php echo $this->__('Special Days'); ?></h3>
+                                    <?php if (count($spencialDays)): ?>
+                                        <ul>
+                                            <?php foreach ($spencialDays as $spencialDay): ?>
+
+                                                <li>
+                                                    <p class="name-special">
+                                                        <?php echo $spencialDay['name']; ?>
+                                                    </p>
+                                                    <p>
+                                                        <?php echo date_format(date_create($spencialDay['date']), 'l jS F'); ?>
+                                                    </p>
+                                                    <p>
+                                                        <?php if ($spencialDay['time_open'] != null && $spencialDay['time_open'] != $spencialDay['time_close']): ?>
+                                                        <?php if (Mage::helper('storepickup')->getTimeFormat() == '12'){ ?>
+                                                            <?php echo date("h:i A", strtotime($spencialDay['time_open'])) . ' - ' . date("h:i A", strtotime($spencialDay['time_close'])) ?>
+                                                        <?php }else{?>
+                                                        <?php echo date("H:i A", strtotime($spencialDay['time_open'])) . ' - ' . date("H:i A", strtotime($spencialDay['time_close'])) ?>
+                                                        <?php }?>
+                                                                <?php else: ?>
+                                                            <?php echo $this->__('Closed'); ?>
+                                                        <?php endif; ?>
+                                                    </p>
+
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    <?php else: ?>
+                                        <h1 class="not-exist">
+                                            <?php echo $this->__('There is no special day information at this time'); ?>
+                                        </h1>
+                                    <?php endif; ?>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" >
+                                <?php $holidays = Mage::helper('storepickup')->getHolidayDays($store_id); ?>
+                                <?php //Zend_debug::dump($holidays);die();?>
+
+                                <div id="open_hour_holiday">
+                                    <h3 class="open_hour_title"><?php echo $this->__('Holidays'); ?></h3>
+                                    <?php if (count($holidays)): ?>
+                                        <ul>
+                                            <?php foreach ($holidays as $holiday): ?>
+                                                <li>
+                                                    <p class="name-special">
+                                                        <?php echo $holiday['name']; ?>
+                                                    </p>
+                                                    <p>
+                                                        <?php echo date_format(date_create($holiday['date']), 'l jS F'); ?>
+                                                    </p>
+
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    <?php else: ?>
+                                    <h1 class="not-exist">
+                                            <?php echo $this->__('There is no holiday information at this time'); ?>
+                                        </h1>
+                                    <?php endif; ?>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div name="tab_content" id="tab_content_3" class="tab_content">
+
+                    <div class = "pickup_contact col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                        <h3><?php echo $this->__('Contact Store') ?></h3>
+                        <form id="review-form" method="post" action="<?php echo $this->getUrl('*/*/savecontact', array('id' => $store_id)); ?>">
+                            <fieldset>
+                                <ul class="form-list-store">
+                                    <li>
+                                        <label class="required col-lg-12 col-md-12 col-sm-12 col-xs-12" for="name_field">
+
+                                            <?php echo $this->__('Name') ?>
+                                            <em>*</em>
+                                        </label>
+                                        <div class="input-box col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <input id="name_field" class="required-entry form-control" type="text" value="<?php echo $this->getFormData('name') ?>" name="name">
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <label class="required col-lg-12 col-md-12 col-sm-12 col-xs-12" for="email_field">
+
+                                            <?php echo $this->__('Email') ?>
+                                             <em>*</em>
+                                        </label>
+                                        <div class="input-box col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <input id="email_field" class="required-entry form-control validate-email" type="text" value="<?php echo $this->getFormData('email') ?>" name="email">
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <label class="required col-lg-12 col-md-12 col-sm-12 col-xs-12" for="message_field">
+
+                                            <?php echo $this->__('Message') ?>
+                                             <em>*</em>
+                                        </label>
+                                        <div class="input-box col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <textarea id="message_field" class="required-entry form-control" rows="3" cols="5" name="message"style="width: <?php echo isset($area_width) ? $area_width : ''; ?>px; height: <?php echo isset($area_height) ? $area_height : '' ?>px;"><?php echo $this->getFormData('message') ?></textarea>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="field">
+                                            <label class="required col-lg-12 col-md-12 col-sm-12 col-xs-12" for="pickup-captcha"><?php echo $this->__('Verification'); ?><em>*</em></label>
+                                            <div class="input-box col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <img src="<?php echo $this->getUrl('*/*/imagecaptcha', array('id' => $storeInfo->getId())); ?>" id="pickup_captcha_image" />
+                                                <span id="pickup-please-wait-captcha" style="display:none;" class="opc-please-wait">
+                                                    <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" class="v-middle" alt="" /> &nbsp; <?php echo $this->__('Getting new captcha') ?>...
+                                                </span>
+                                                <a href="javascript:void(0);" onclick="refreshCaptchaImage();
+                                                        return false;" id="pickup-captcha-link"><?php echo $this->__("Refresh"); ?></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="field">
+                                            <div class="input-box col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <input id="pickup-captcha" class="required-entry form-control" type="text" title="<?php echo $this->__('Captcha code') ?>" name="captcha" />
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </fieldset>
+                            <div class="buttons-set button-pickup">
+
+                                <button class="button b-pickup" title="Submit" type="button" onclick="submitfeedback()">
+                                    <span>   <span>
+                                            <canvas style="width: 0px; height: 5px; top: -2px;"></canvas>
+                                            <cufontext><?php echo $this->__('Submit') ?></cufontext>
+                                            </cufon>
+                                        </span>     </span>
+                                </button>
+                                <p class="required" style="margin: -3% -11%;">* Required Fields</p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function submitfeedback() {
+        var validator = new Validation('review-form');
+        if (validator.validate()) {
+            $('review-form').submit();
+        }
+    }
+    function refreshCaptchaImage() {
+        url = '<?php echo $this->getUrl('*/*/refreshcaptcha', array('id' => $store_id)) ?>';
+        $('pickup_captcha_image').hide();
+        $('pickup-captcha-link').hide();
+        $('pickup-please-wait-captcha').show();
+        refreshCaptcha = new Ajax.Request(url, {
+            method: 'get',
+            onSuccess: function(transport) {
+                imageCapcha = new Image();
+                imageCapcha.src = transport.responseText;
+                $('pickup_captcha_image').src = imageCapcha.src;
+                $('pickup-please-wait-captcha').hide();
+                $('pickup_captcha_image').show();
+                $('pickup-captcha-link').show();
+            },
+            onException: function(xhr, e) {
+                $('pickup-please-wait-captcha').hide();
+                $('pickup_captcha_image').show();
+                $('pickup-captcha-link').show();
+                alert('Exception: ' + e);
+            }
+        });
+    }
+
+</script>

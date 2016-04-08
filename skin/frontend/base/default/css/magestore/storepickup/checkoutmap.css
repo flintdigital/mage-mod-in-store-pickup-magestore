@@ -1,0 +1,176 @@
+#black_background{
+    position: fixed;
+    z-index: 99;
+    top: 0;
+    left: 0;
+    background: black;
+    opacity: .7;
+    width: 100% !important;
+    height: 1000px;
+}
+.modal-box {
+    position: fixed;
+    z-index: 9999;
+    top: 6%;
+    left: 6%;
+    width: 87%;
+    height:90%;
+    background: white;
+    border-bottom: 1px solid #aaa;
+    border-radius: 4px;
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-clip: padding-box;
+}
+button#select_store_pickup {
+    margin-left: 0px;
+    width: 80%;
+    margin-top: 10px;
+}
+#select_box_store_pickup {
+    margin-bottom: 10px;
+}
+.modal-box header,
+.modal-box .modal-header {
+    padding: 5px 10px;
+    position: relative;
+}
+
+.modal-box header h3,
+.modal-box header h4,
+.modal-box .modal-header h3,
+.modal-box .modal-header h4 { margin: 0; }
+
+.modal-box .modal-body {
+    padding: 0;
+    margin: auto;
+    height: 95%;
+    float: left;
+    width: 100%;}
+
+.modal-overlay {
+    opacity: 0;
+    filter: alpha(opacity=0);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 900;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3) !important;
+}
+.store-button-popup{
+    text-align: right;
+}
+.selected_store_info{
+    float: left;
+    font-size: 24px;
+    color: #1899D2;
+    line-height: 34px;
+    font-weight: 600;
+}
+
+.modal-body .store-map{
+    /*height: 500px;*/
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#popup_outer .popup-overlay{
+    background: none repeat scroll 0 0 #000000;
+    height: 100%;
+    left: 0;
+    opacity: -0.8;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+}
+.input_hidden{
+    visibility: hidden;
+}
+#checkout-shipping-method-load .sp-methods ul li label{
+    background-color: transparent;
+}
+@media screen and (max-width:770px){
+    .selected_store_info{
+        font-size: 18px;
+    }
+}
+@media screen and (max-width:550px){
+    .store-button-popup{
+        width: 100%;
+        float: left;
+        margin-bottom: 20px;
+        display: none;
+    }
+    .store-button-popup1{
+        display: block !important;
+        line-height: 20px;
+/*        float: left;
+        width: 100%;*/
+    }
+    #cancel_store1{
+        position: absolute;
+        right: -5px;
+        top: -8px;
+    }
+    #apply_store1{
+        float: right;
+        background: #5BD2EC;
+        padding: 3px 10px;
+        border-radius: 4px;
+        color: #fff;
+        font-weight: 600;
+        margin-right: 10px;
+        margin-bottom: 5px;
+    }
+    .btn-fullmap{
+        top:200px !important;
+    }
+    .store-pickup-map-box{
+        padding: 0;
+    }
+    #selected_store{
+        font-size: 14px;
+        line-height: 18px;
+    }
+
+}
+@media screen and (max-width:400px){
+    .selected_store_info{
+        font-size: 16px;
+        line-height: 20px;
+        margin-bottom: 5px;
+        margin-top: 5px;
+    }
+    #search_radius{
+        width:240px;
+    }
+    /*#search_box{
+        top:28px !important;
+    }*/
+}
+.storepickup #s_method_storepickup_storepickup{
+    display: inline-block;
+}
+
+.ajax-loading-wait {
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: 5px;
+    line-height: 24px;
+    height: 24px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    list-style: outside none none;
+}
+.ajax-loading-wait img {
+    float: left;
+    margin: 0px 5px 0px 6px !important;
+    width: 24px !important;
+    display: block !important;
+    position: relative !important;
+}

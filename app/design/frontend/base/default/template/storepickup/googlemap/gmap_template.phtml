@@ -1,0 +1,284 @@
+<?php $store_id = $this->getRequest()->getParam('viewstore');?>
+<div style="display: none">
+    <div id="template-iw-container" class="iw-container">
+        <div title="#{store_name}" class="iw-title">#{store_name}</div>
+        <div class="iw-content">
+            <p>#{address}</p>
+            <p>Phone: +#{store_phone}<br>Email: #{store_email}<!-- <br>www: www.myvistaalegre.com --></p>
+            <?php if(!$store_id):?>
+            <a href="#{store_view_url}"><?php echo $this->__('View more info') ?></a>
+            <?php endif;?>
+            <!--<div class="change-window change-window-direction" title="<?php echo $this->__('Directions') ?>"></div>-->
+            <div class="directions-type">
+                <ul id="directions-tms" class="directions-tms">
+                    <li class="active travel" travel="DRIVING">
+                        <div class="driving active" ></div>
+                    </li>
+                    <li class="travel" travel="WALKING" >
+                        <div class="walking"></div>
+                    </li>
+                    <li class="travel" travel="BICYCLING">
+                        <div class="bicycling"></div>
+                    </li>
+                    <li class="travel" travel="TRANSIT">
+                        <div class="transit"></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" id="originA" onmouseover="originA.title=originA.value" name="originA" placeholder="<?php echo $this->__('Enter a location') ?>" autocomplete="off">
+                <button id="btn-getdirections" type="button" class="btn btn-primary"><?php echo $this->__('Go') ?></button>
+            </div>
+            <div id="directions-panel" class="directions-panel"></div>
+        </div>
+        <div class="iw-bottom-gradient"></div>
+    </div>
+
+
+
+    <div id="infowindow" class="infowindow container col-lg-12 col-md-12 col-sm-12 col-xs-12" role="tabpanel">
+        <!-- Nav tabs -->
+        <!-- <ul class="nav nav-tabs row" role="tablist">
+            <li role="presentation" class="active" style="width: 50%;">
+                <a class="taba" aria-controls="tab-locationinfo" role="tab" data-toggle="tab"><?php echo $this->__("Location Info") ?></a>
+            </li>
+            <li role="presentation" style="width: 50%;">
+                <a class="taba" aria-controls="tab-directions" role="tab" data-toggle="tab"><?php echo $this->__("Directions")?></a>
+            </li>
+        </ul> -->
+        <!-- End Nav tabs -->
+
+        <!-- Tab panes -->
+        <div class="tab-content row">
+            <!-- Tab Location Info -->
+            <div role="tabpanel" class="tab-pane active container" id="tab-locationinfo">
+                <ul class="">
+                    <li ><h5><p>#{store_name}</p></h5></li>
+                    <li><p>#{address}</p></li>
+                    <li><p>#{city}</p></li>
+                    <li><p>#{state}</p></li>
+                    <li><p>#{country_name}</p></li>
+                    <?php if(!$store_id):?>
+                    <li><a href="#{store_view_url}"><p class="link"><?php echo $this->__('Views Detail') ?></p></a></li>
+                    <?php endif;?>
+                    <img class="image_icon img-responsive" />
+                </ul>
+            </div>
+            <!-- End Tab Location Info-->
+
+            <!-- Tab Directions -->
+            <div role="tabpanel" class="tab-pane container direction-control" id="tab-directions">
+                <div class="directions-type row">
+                    <ul id="directions-tms" class="directions-tms">
+                        <li class="active travel" travel="DRIVING">
+                            <div class="driving active" ></div>
+                        </li>
+                        <li class="travel" travel="WALKING" >
+                            <div class="walking"></div>
+                        </li>
+                        <li class="travel" travel="BICYCLING">
+                            <div class="bicycling"></div>
+                        </li>
+                        <li class="travel" travel="TRANSIT">
+                            <div class="transit"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">A</span>
+                        <input type="text" class="form-control" id="originA" name="originA" placeholder="<?php echo $this->__('Enter a location') ?>" autocomplete="off">
+                        <p class="error">
+                        </p>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">B</span>
+                        <input readonly="true" title="#{address}" value="#{address}" class="form-control" type="text" id="originB" name="originB" placeholder="<?php echo $this->__('Enter a location') ?>" autocomplete="off">
+                        <p class="error">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <button id="btn-getdirections" type="button" class="btn btn-primary"><?php echo $this->__('Get Directions') ?></button>
+                </div>
+                <div id="directions-panel">
+                </div>
+            </div>
+            <!-- End Tab Directions -->
+        </div>
+        <!-- End Tab panes -->
+    </div>
+    <span id="storeBoxTemplate" class="widget-runway-subview-card-view-container">
+        <span style="" class="widget-runway-card-background">
+        </span>
+        <span class="widget-runway-card-active-pane">
+        </span>
+        <span class="widget-runway-card-view-pane widget-runway-card-view-pane-visible widget-runway-card-view-pane-foreground">
+            <li class="widget-runway-card">
+                <div class="widget-runway-card-button">
+                    <div class="widget-runway-card-background-flicker-hack-clip">
+                        <div class="widget-runway-card-background-flicker-hack-wrapper">
+                            <img class="image_icon widget-runway-card-background-flicker-hack">
+                        </div>
+                    </div>
+                    <div class="widget-runway-card-caption-wrapper">
+                        <div class="widget-runway-card-caption">
+                            <div class="widget-runway-card-caption-icon widget-runway-card-caption-icon-photo" title="View Detail">
+                            </div>
+                            <label class="widget-runway-card-caption-text">#{store_name}</label>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </span>
+    </span>
+    <div id="infoyourlocation" class="infoyourlocation container col-lg-12 col-md-12 col-sm-12 col-xs-12" role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs row" role="tablist">
+            <li role="presentation" class="active">
+                <a class="taba" aria-controls="tab-locationinfo" role="tab" data-toggle="tab"><?php echo $this->__("Your Location") ?></a>
+            </li>
+        </ul>
+        <!-- End Nav tabs -->
+
+        <!-- Tab panes -->
+        <div class="tab-content row">
+            <!-- Tab Location Info -->
+            <div role="tabpanel" class="tab-pane active container">
+                <ul class="">
+                    <li><p>#{formattedAddress}</p></li>
+                    <li><p>#{city}</p></li>
+                    <li><p>#{state}</p></li>
+                    <li><p>#{country}</p></li>
+                </ul>
+            </div>
+            <!-- End Tab Location Info-->
+        </div>
+        <!-- End Tab panes -->
+    </div>
+    <!-- <div id="selected_st_info_template">
+        <div class="title store-address">
+            <h3 id="store-info-title">ABERGREEN HORTICULTURE LTD</h3>
+            <span class="store-address-info">ARCH 8, PALMERSTON ROAD, &nbsp;ABERDEEN, &nbsp;United Kingdom</span>
+        </div>
+        <div id="store_date_time_box">
+            <div id="shipping_date_div" class="storepickup-box col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <label class="required" for="shipping_date">Shipping Date </label>
+                <input style="" name="shipping_date" id="shipping_date" value="" class="input-text required-entry form-control" readonly="">
+            </div>
+            <div id="time-box" class="storepickup-box col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display:none;"><label class="required" for="shipping_time">Shipping Time </label>
+            <select style="display: none;" id="shipping_time" name="shipping_time" class="validate-select form-control"></select>
+            </div>
+        </div>
+    </div> -->
+</div>
+<style>
+
+    .widget-runway-card-background-active {
+        background-color: #48B5E9;
+    }
+    .widget-runway-card-background {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        opacity: 0.3;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+        -moz-opacity: 0.3;
+        -khtml-opacity: 0.3;
+        z-index: 2;
+    }
+    .widget-runway-card-background:hover {
+        background-color: #48B5E9;
+    }
+    #store_map .infowindow .tab-pane ul.directions-tms li.active {
+        border-bottom-color: #3A84DF;
+    }
+    .widget-runway-card-active-pane {
+        position: absolute;
+        left: 0px;
+        top: -11px;
+        height: 10px;
+        width: 202px;
+        background-color: rgb(46, 138, 184);
+        z-index: 100000;
+        opacity: 0;
+    }
+
+    .store-map .infowindow {
+        width: 220px;
+        height: 269px;
+    }
+
+
+    /*Infowindow*/
+    .custom-gm-style-iw {
+        width: auto !important;
+        top: 15px !important;
+        left: 0px !important;
+        background-color: #fff;
+        box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6);
+        border: 1px solid rgba(72, 181, 233, 0.6);
+        border-radius: 2px 2px 10px 10px;
+    }
+    .width-gm-style-iw {
+        width: 222px !important;
+    }
+    .custom-gm-style-iw-mobile {
+        width: 222px !important;
+    }
+    .iw-container {
+        margin-bottom: 10px;
+    }
+    .iw-container .iw-title {
+        font-family: 'Open Sans Condensed', sans-serif;
+        font-size: 18px;
+        font-weight: 400;
+        padding: 5px;
+        background-color: #48b5e9;
+        color: white;
+        margin: 0;
+        border-radius: 2px 2px 0 0;
+    }
+    .iw-container .iw-content {
+        font-size: 13px;
+        line-height: 18px;
+        font-weight: 400;
+        margin-right: 1px;
+        padding: 10px 10px 0px 10px;
+        max-height: 140px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .iw-container img {
+        /*margin-left: 15px;*/
+        margin-top: 5px;
+    }
+    .iw-container .directions-panel {
+        padding: 10px;
+    }
+    .iw-container input {
+        border: 1px solid #48B5E9;
+    }
+    .iw-content p {
+        width: 200px;
+    }
+    .iw-subTitle {
+        font-size: 16px;
+        font-weight: 700;
+        padding: 5px 0;
+    }
+    .iw-bottom-gradient {
+        position: absolute;
+        width: 217px;
+        height: 0px;
+        bottom: 10px;
+        right: 18px;
+        background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+        background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+        background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+        background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+    }
+</style>

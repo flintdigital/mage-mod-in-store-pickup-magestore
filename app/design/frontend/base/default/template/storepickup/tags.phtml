@@ -1,0 +1,93 @@
+<?php
+    $tags = $this->getTags();
+    $count = count($tags);
+    $width = 100;
+    if(!count($tags) || $this->getRequest()->getParam('viewstore'))
+        return;
+?>
+<div class="list-tag">
+<h2><?php echo $this->__('Tags') ?></h2>
+<div class="list-tag-ul">
+    <ul id="listLocate" class="listLocate" style="width: <?php echo $width*$count + 100; ?>px">
+    <?php foreach($tags as $tag):?>
+    <?php if(!$tag->getIcon())$tag->setIcon('location.png'); ?>
+    <li title="<?php echo $this->__($tag->getTitle()); ?>" tagid="<?php echo $tag->getId(); ?>">
+        <img width="27" height="40" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'storepickup/images/icon/'.$tag->getIcon() ?>" alt="<?php echo $this->__($tag->getTitle()) ; ?>">
+        <span style="float:left; width:100%;text-align:center; "><!--input id="store-tag-checkbox-<?php echo $tag->getId(); ?>" class="store-tag-checkbox" type="checkbox" name="store_tags" value="<?php echo $tag->getId(); ?>"-->
+        <label><?php echo $tag->getTitle(); ?></label>
+        </span>
+    </li>
+    <?php endforeach; ?>
+</ul>
+</div>
+</div>
+<script type="text/javascript">
+    var storeTags = $('listLocate').select('input[type=checkbox]');
+
+    function googleMapFilterStoreByTag(li) {
+        var storeTags = $$('ul.listLocate li.active-tag');
+        var tagIds = [];
+        for (var i = 0; i < storeTags.length; i++) {
+            tagIds.push(storeTags[i].getAttribute('tagid'));
+        };
+
+        if (googleMap !== undefined && googleMap !== null) {
+            googleMap.filterStoreByTag(tagIds);
+        }
+    }
+
+    $$('ul.listLocate li').each(function(li) {
+        li.observe('click', function(event) {
+            if (this.hasClassName('active-tag')) {
+                this.removeClassName('active-tag')
+            } else {
+                this.addClassName('active-tag')
+            }
+            googleMapFilterStoreByTag(this);
+            // if (li.down('.store-tag-checkbox')) {
+            //     if(event.element().type !== "checkbox") {
+            //         li.down('.store-tag-checkbox').checked = !li.down('.store-tag-checkbox').checked;
+            //     }
+            //     googleMapFilterStoreByTag(this);
+            // }
+        });
+    });
+</script>
+<style type="text/css">
+    ul.listLocate li {
+       display: inline-block;
+      cursor: pointer;
+      width: 70px;
+      background-color: #e5e5e5;
+      height: 70px;
+      margin-right: 10px;
+      padding-top: 5px;
+    }
+
+    ul.listLocate li.hovertag {
+        background-color: #4C9ED9;
+    }
+    ul.listLocate li input[type="checkbox"] {
+/*        height: 20px;*/
+    }
+    ul.listLocate li:hover {
+        background-color:#48B5E9;
+        color:#fff;
+    }
+    ul.listLocate li.active-tag {
+        background-color:#48B5E9;
+        color:#fff;
+    }
+    ul.listLocate li label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+        height: 20px;
+        padding-left: 2px;
+        float:left;
+        text-align:center;
+    }
+    ul.listLocate .store-tag {
+        cursor: pointer;
+    }
+</style>

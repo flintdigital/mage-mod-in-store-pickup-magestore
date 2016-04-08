@@ -1,0 +1,65 @@
+
+<?php $listStore = $this->getStoreByCustomerAddress()?>
+<?php $listStore = $listStore ? $listStore : $this->getListStore() ?>
+<?php $modelshipping = $this->getShippingModel() ?>
+<?php $holiday_nonce = $modelshipping->getConfigData('holiday_nonce') ?>
+<?php $early_date_nonce = $modelshipping->getConfigData('early_date_nonce') ?>
+<?php $store_not_found_nonce = $modelshipping->getConfigData('store_not_found_nonce') ?>
+	
+<input type="hidden" name="holiday_nonce" id="holiday_nonce" value="<?php echo $holiday_nonce ?>">
+<input type="hidden" name="early_date_nonce" id="early_date_nonce" value="<?php echo $early_date_nonce ?>">
+<input type="hidden" name="store_not_found_nonce" id="store_not_found_nonce" value="<?php echo $store_not_found_nonce ?>">
+
+<div id="select-store" >
+	<div class="input-box storepickup-box" id="storepickup-box">
+		<label for="date"><?php echo $this->__('Stores') ?> <span class="required">*</span></label>			
+		<select name="store_id" id="store_id" class="required-entry validate-select" >
+			<option value="" selected ><?php echo $this->__('Select Store') ?></option>
+			<?php
+			
+			foreach($listStore as $store_id=>$store_name)
+			{
+				echo '<option value="'. $store_id .'" >'. $store_name .'</option>';
+			}
+		
+			?>
+		</select>
+		<div class="clear fix" >&nbsp;</div>					
+	</div>		
+	<div class="input-box storepickup-box" id="date-box">
+		<label for="date"><?php echo $this->__('Pickup Date') ?> </label>
+		<input  name="shipping_date" id="shipping_date" value="" class="required-entry " onchange="changeDate('<?php echo Mage::helper('storepickup')->getChangDateUrl(); ?>');"/>
+		<img src="<?php echo Mage::getBaseUrl('skin')?>/adminhtml/default/default/images/grid-cal.gif" alt="dateinput" class="v-middle" id="shipping_date_trig" title="dateinput"  />
+	</div><div id="date-notation"></div>
+	<div class="clear fix" >&nbsp;</div>
+	<div class="input-box storepickup-box" id="time-box">
+		<label for="date"><?php echo $this->__('Pickup Time') ?> </label>					
+		<select id="shipping_time" name="shipping_time" class="required-entry validate-select">
+			<option value="" selected><?php echo $this->__('Select Pickup Time') ?></option>
+			<?php
+
+		?>
+		</select>
+		<span id="time-please-wait" style="display:none;" class="opc-please-wait">
+			<img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" class="v-middle" alt="" /> &nbsp; <?php echo $this->__('Loading Shipping Times...') ?>
+		</span>							
+	</div>
+</div>
+<script type="text/javascript">
+
+	var storepickup = new Storepickup('<?php echo Mage::helper('storepickup')->getChangeStoreUrl(); ?>');
+
+	
+	Event.observe('store_id', 'change', function(event){ 
+			storepickup.changeStore();
+	});
+	
+	Event.observe('shipping_time', 'change', function(event){ 		
+			storepickup.changeTime('<?php echo Mage::helper('storepickup')->getChangTimeUrl(); ?>');
+	});	
+
+	Event.observe('shipping_date_trig', 'click', function(event){ 		
+			$('shipping_time').selectedIndex = 0;
+	});
+
+</script>		

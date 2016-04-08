@@ -1,0 +1,112 @@
+<?php $store_id = $this->getRequest()->getParam('viewstore'); ?>
+<div id="app-viewcard-strip" class="app-viewcard-strip col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="app-bottom-content-anchor">
+        <div id="image-footer"></div>
+        <div id="app-vertical-widget-holder" class="app-vertical-widget-holder">
+            <div class="app-vertical-item">
+                <div class="full-screen-map">
+                    <div id="full-screen-map-btn" class="full-screen-map-btn">
+                        <div class="full-screen-map-btn-icon-common expland"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="mylocation" class="app-vertical-item">
+                <div class="widget-mylocation">
+                    <div id="widget-mylocation-button" class="widget-mylocation-button"  title="<?php echo $this->__('Show My Location') ?>">
+                    <div class="widget-mylocation-button-icon-common widget-mylocation-button-normal widget-mylocation-cookieless"></div>
+                    </div>
+                    <div class="widget-mylocation-tooltip widget-mylocation-tooltip-invisible">
+                        <div class="widget-mylocation-tooltip-label-wrapper">
+                            <div class="widget-mylocation-tooltip-label">
+                                <label><?php echo $this->__('Show My Location') ?></label>
+                            </div>
+                        </div>
+                        <div class="widget-mylocation-tooltip-pointer"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="app-vertical-item" id="zoom">
+                <div class="widget-zoom">
+                    <div id="widget-zoom-in" class="widget-zoom-button widget-zoom-in" title="<?php echo $this->__('Zoom In') ?>">
+                    <div  class="widget-zoom-icon"></div>
+                    </div>
+                    <div id="widget-zoom-out" class="widget-zoom-button widget-zoom-out" title="<?php echo $this->__('Zoom Out') ?>">
+                    <div  class="widget-zoom-icon"></div>
+                    </div>
+                    <div class="widget-zoom-button-divider"></div>
+                    <div class="widget-zoom-tooltip widget-zoom-tooltip-invisible">
+                        <div class="widget-zoom-tooltip-label-wrapper">
+                            <div class="widget-zoom-tooltip-label">
+                                <label class="widget-zoom-tooltip-title">
+                                    <span><?php echo $this->__('Zoom') ?></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="widget-zoom-tooltip-pointer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="app-horizontal-widget-holder">
+            <div id="runway-expand-button" class="runway-expand-button">
+                <div id="widget-expand-button-pegman-container" class="widget-expand-button-pegman-container">
+                    <?php if(!$store_id):?>
+                    <div class="widget-expand-button-pegman">
+                        <div id="widget-expand-button" class="widget-expand-button" title="<?php echo $this->__('Show and Hide store list') ?>">
+                        <label class="widget-expand-button-label"><?php echo $this->__('Explore') ?></label>
+                        <label class="widget-expand-button-label" style="display: none"><?php echo $this->__('Show imagery') ?></label>
+                        <div class="widget-expand-button-icon"></div>
+                        </div>
+                    </div>
+                    <?php endif;?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="app-widget-minimap"></div>
+    <?php if(!$store_id):?>
+    <div id="app-widget-viewcard" class="app-widget-viewcard">
+        <div class="widget-runway">
+            <div class="watermark" style="margin-bottom: 1px;"></div>
+            <div class="widget-runway-growable">
+                <div class="widget-runway-growable-expander"></div>
+                <div class="widget-runway-tooltip-holder widget-runway-subview-tooltip" style="visibility: hidden;"></div>
+                <div class="widget-runway-background-filler widget-runway-background-filler-many"></div>
+                <div class="widget-runway-thumbstrip-background">
+                    <div class="widget-runway-tray-wrapper">
+                        <ul id="storepickup-list-store-box" class="storepickup-list-store-box widget-runway-subview-card-list widget-runway-all-cards">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif;?>
+</div>
+<script type="text/javascript">
+    if ($('widget-expand-button')) {
+        $('widget-expand-button').observe('click', function() {
+            if ($('widget-expand-button-pegman-container').hasClassName('widget-runway-tray-open')) {
+                $('app-widget-viewcard').down('.widget-runway-growable-expander').setStyle({
+                    height: "0px"
+                });
+                $('widget-expand-button-pegman-container').removeClassName('widget-runway-tray-open');
+                $('app-widget-viewcard').down('.widget-runway').removeClassName('widget-runway-tray-open');
+                $('app-widget-viewcard').down('.widget-runway').removeClassName('widget-runway-tray-render');
+            } else {
+                $('app-widget-viewcard').down('.widget-runway-growable-expander').setStyle({
+                    height: "126px"
+                });
+                $('widget-expand-button-pegman-container').addClassName('widget-runway-tray-open');
+                $('app-widget-viewcard').down('.widget-runway').addClassName('widget-runway-tray-open');
+                $('app-widget-viewcard').down('.widget-runway').addClassName('widget-runway-tray-render');
+
+                if ($$('.widget-runway-tray-wrapper')[0].scrollWidth > $$('.widget-runway-tray-wrapper')[0].clientWidth) {
+                    $$('.widget-runway-card-caption-wrapper').invoke('addClassName', 'fitScroll');
+                } else {
+                    $$('.widget-runway-card-caption-wrapper').invoke('removeClassName', 'fitScroll');
+                }
+            }
+        });
+    }
+</script>

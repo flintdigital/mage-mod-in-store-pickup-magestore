@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="top.links">
+            <block type="storepickup/displayallstores" name="displayallstores" >
+                <action method="addTopLinkStores" />
+            </block>
+        </reference>
+        <reference name="footer_links">
+            <block type="storepickup/displayallstores" name="displayallstores" >
+                <action method="addFooterLinkStores" />
+            </block>
+        </reference>
+<!--        <reference name="head">
+            <action method="addJs">
+                <script>magestore/storepickup.js</script>
+            </action>
+        </reference>-->
+    </default>
+
+    <storepickup_checkout>
+        <reference name="head">
+            <block type="core/text" name="google.lazyloading">
+                <action method="setText">
+                  <text>
+                     <![CDATA[<script type="text/javascript" src="//www.google.com/jsapi"></script>]]>
+                  </text>
+                </action>
+            </block>
+            <action method="addJs">
+                <script>magestore/storepickup/markerclusterer_compiled.js</script>
+            </action>
+            <action method="addJs">
+                <script>magestore/storepickup/storemanager.js</script>
+            </action>
+            <action method="addJs">
+                <script>magestore/storepickup/tooltip/tooltip.js</script>
+            </action>
+            <action method="addCss">
+                <styleSheet>css/magestore/storepickup/storepickup_support.css</styleSheet>
+            </action>
+            <action method="addCss">
+                <styleSheet>css/magestore/storepickup/storepickup.css</styleSheet>
+            </action>
+            <action method="addCss">
+                <styleSheet>css/magestore/storepickup/gmapfooter.css</styleSheet>
+            </action>
+            <action method="addJs">
+                <script>magestore/storepickupcheckout.js</script>
+            </action>
+            <action method="addCss">
+                <styleSheet>css/magestore/storepickup/checkoutmap.css</styleSheet>
+            </action>
+            <action method="addJs">
+                <script>calendar/calendar.js</script>
+            </action>
+            <action method="addJs">
+                <script>calendar/calendar-setup.js</script>
+            </action>
+        </reference>
+        <reference name="before_body_end">
+            <block type="storepickup/allstores" name="checkout_map" template="storepickup/checkoutmap.phtml">
+                <block type="storepickup/allstores" name="store_view" template="storepickup/store_view.phtml" />
+                <block type="core/template" name="searchbox2" template="storepickup/googlemap/searchbox2.phtml"  />
+                <block type="core/template" name="liststorebox" template="storepickup/googlemap/liststorebox.phtml"  />
+                <block type="core/template" name="gmap_template" template="storepickup/googlemap/gmap_template.phtml"  />
+                <block type="core/template" name="translateJs" template="storepickup/translateJs.phtml"  />
+            </block>
+        </reference>
+    </storepickup_checkout>
+
+    <checkout_onepage_index>
+        <update handle="storepickup_checkout" />
+    </checkout_onepage_index>
+    <aw_onestepcheckout_index_index>
+        <update handle="storepickup_checkout" />
+    </aw_onestepcheckout_index_index>
+    <onestepcheckout_index_index>
+        <update handle="storepickup_checkout" />
+    </onestepcheckout_index_index>
+    <gomage_checkout_onepage_index>
+        <update handle="storepickup_checkout" />
+    </gomage_checkout_onepage_index>
+    <onestepcheckout_ajax_save_billing>
+        <update handle="storepickup_checkout" />
+    </onestepcheckout_ajax_save_billing>
+    <checkout_cart_index>
+        <update handle="storepickup_checkout" />
+    </checkout_cart_index>
+	<opc_index_index>
+        <update handle="storepickup_checkout" />
+    </opc_index_index>
+
+
+
+    <storepickup_index_index>
+        <reference name="head">
+            <block type="core/text" name="google.lazyloading">
+                <action method="setText">
+                  <text>
+                     <![CDATA[<script type="text/javascript" src="//www.google.com/jsapi"></script>]]>
+                  </text>
+                </action>
+            </block>
+            <action method="addJs">
+                <script>magestore/storepickup/markerclusterer_compiled.js</script>
+            </action>
+            <action method="addJs">
+                <script>magestore/storepickup/storemanager.js</script>
+            </action>
+            <action method="addJs">
+                <script>magestore/storepickup/tooltip/tooltip.js</script>
+            </action>
+            <action method="addCss">
+                <styleSheet>css/magestore/storepickup/storepickup_support.css</styleSheet>
+            </action>
+            <action method="addCss">
+                <styleSheet>css/magestore/storepickup/storepickup.css</styleSheet>
+            </action>
+            <action method="addCss">
+                <styleSheet>css/magestore/storepickup/gmapfooter.css</styleSheet>
+            </action>
+        </reference>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="storepickup/allstores" name="allstores" template="storepickup/liststorepickup.phtml">
+                <block type="storepickup/allstores" name="store_view" template="storepickup/store_view.phtml" />
+                <block type="core/template" name="searchbox2" template="storepickup/googlemap/searchbox2.phtml"  />
+                <block type="core/template" name="liststorebox" template="storepickup/googlemap/liststorebox.phtml"  />
+                <block type="core/template" name="gmap_template" template="storepickup/googlemap/gmap_template.phtml"  />
+                <block type="core/template" name="translateJs" template="storepickup/translateJs.phtml"  />
+            </block>
+            <block type="storepickup/tags" name="tags" template="storepickup/tags.phtml" />
+        </reference>
+    </storepickup_index_index>
+    <storepickup_index_changesuburb>
+        <reference name="content">
+            <block type="storepickup/storepickup" name="list_store" as="list_store" template="storepickup/store.phtml" />
+        </reference>
+    </storepickup_index_changesuburb>
+    <storepickup_index_changesuburbpagestore>
+        <reference name="content">
+            <block type="storepickup/storepickup" name="page_store" as="page_store" template="storepickup/pagestore.phtml" />
+        </reference>
+    </storepickup_index_changesuburbpagestore>
+    <sales_order_view>
+        <reference name="sales.order.info">
+            <action method="setTemplate">
+                <template>storepickup/sales/order/info.phtml</template>
+            </action>
+        </reference>
+    </sales_order_view>
+</layout>

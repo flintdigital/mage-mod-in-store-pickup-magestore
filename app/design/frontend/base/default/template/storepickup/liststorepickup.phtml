@@ -1,0 +1,84 @@
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?php echo Mage::getModel('storepickup/shipping_storepickup')->getConfigData('gkey'); ?>&sensor=false&libraries=places,geometry"></script>
+<?php echo  $this->getChildHtml('translateJs') ;?>
+<?php
+    $store_id = $this->getRequest()->getParam('viewstore');
+    $store = Mage::getModel('storepickup/store')->load($store_id);
+    $storeViewId = Mage::app()->getStore()->getStoreId();
+    $currentUnit = Mage::getStoreConfig("carriers/storepickup/systemunit", Mage::app()->getStore()->getId());
+    $radiusMaxValue         = Mage::getStoreConfig("carriers/storepickup/maxradius", Mage::app()->getStore()->getId());
+?>
+<?php if($store->getId()): ?>
+<?php echo  $this->getChildHtml('store_view') ;?>
+<?php else: ?>
+<script>
+    <?php echo Mage::helper('storepickup')->echoAllStoreToJson($storeViewId) ?>
+</script>
+<div class="storepickup-list">
+    <div class="page-title">
+        <h1><?php echo $this->__('Our Stores'); ?></h1>
+        <div id="store_description">
+            <?php echo Mage::getModel("storepickup/shipping_storepickup")->getConfigData('description'); ?>
+        </div>
+    </div>
+    <div class="row">
+        <div id="store-pickup-map-box" class="store-pickup-map-box col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <?php echo  $this->getChildHtml('searchbox2') ;?>
+            <div class="store-map col-lg-12 col-md-12 col-sm-12 col-xs-12" id="store_map"></div>
+            <?php echo  $this->getChildHtml('liststorebox') ;?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
+<?php echo  $this->getChildHtml('gmap_template') ;?>
+<script type="text/javascript">
+    // magestore.storepickup.runSetup = function() {
+        if(typeof listStoreJson === "undefined" || listStoreJson === null) {
+            listStoreJson = [];
+        }
+        <?php if($store->getId()): ?>
+        <?php echo 'var listStoreJson = '.Mage::helper('core')->jsonEncode(array($store->prepareToJSON()->getData())) .';'; ?>
+        <?php endif; ?>
+        var mapOptions = {
+            zoom: 5,
+            center: {
+                latitude: 54.8,
+                longitude: 15.6
+            },
+        };
+        //Options for render store html
+        var storeOptions = {
+            imageMarkerIcon : '<?php echo Mage::getBaseUrl("media") . "storepickup/images/icon/{id}/resize/{icon}"; ?>',
+            storeTemplateId: 'storeBoxTemplate',
+            listStoreBoxId: 'storepickup-list-store-box',
+            storeIdItem: 'store-item',
+            storeClassItem: 'store-item'
+        };
+        var options = {
+            googleKey: '<?php echo Mage::getModel("storepickup/shipping_storepickup")->getConfigData("gkey"); ?>',
+            mapOptions: mapOptions,
+            imageFullScreenMapSrc: '<?php echo $this->getSkinUrl("images/arrows-outside-1-128.png"); ?>',
+            radiusBarId: 'storepickup-slider-range',
+            radiusLabelId: 'storepickup-slider-amount',
+            maxRadius: '<?php echo $radiusMaxValue ?>',
+            storeOptions: storeOptions,
+            listStoreJson: listStoreJson,
+            unitSelectId: 'select_unit',
+            currentUnit: '<?php echo $currentUnit ?>',
+            allowRenderListStoreBox: true,
+            searchByDistanceInputId: 'input_search_by_distance',
+            searchByDistanceButtonId: 'btn_search_by_distance',
+            resetSearchByDistanceButtonId: 'btn_reset_distance',
+            searchByAreaInputId: 'input_search_by_area',
+            searchByAreaButtonId: 'btn_search_by_area',
+            searchOptionBoxId: 'dropdown-search-option',
+            searchMultiSelectOptionId: 'mutliSelect',
+            resetSearchByAreaButtonId: 'btn_reset_area',
+            geoYourLocationBtnId: 'widget-mylocation-button',
+            resetSearchByDateBtnId:'btn_reset_date',
+            searchByDateInputId: 'input_search_by_date',
+            searchByDateButtonId: 'btn_search_by_date'
+        }
+    var googleMap = new magestore.storepickup.GoogleMapManager('store_map', options);
+    listStoreJson = null;
+</script>

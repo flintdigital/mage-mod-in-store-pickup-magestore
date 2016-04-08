@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Magestore_Storepickup>
+            <active>true</active>
+            <codePool>local</codePool>
+            <erp>
+                <isERPmodule>true</isERPmodule>
+                <alias_name>Store Pickup</alias_name>
+                <icon>storepickup</icon>
+                <default_page>adminhtml/storepickup_store</default_page>
+            </erp>               
+        </Magestore_Storepickup>
+    </modules>
+</config> 

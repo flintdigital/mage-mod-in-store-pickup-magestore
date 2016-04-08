@@ -1,0 +1,136 @@
+
+<tr>
+    <td colspan="10" width="470">
+        <script type="text/javascript" src="//maps.google.com/maps/api/js?v=3xp&sensor=true"></script> 
+
+        <div class="Magetotal-map" id="Magetotal-map" style="width:1016px;">
+            <a href="javascript:void(0)" onclick="showmap()" id="click-show-map"><?php echo $this->__('Click here to preview on map'); ?></a>
+            <div id="button-reset" style="margin-top:20px;display: none; "><button type="button" onclick="resetMap();"><span><?php echo $this->__('Reset Map') ?></span></button>&nbsp;&nbsp;&nbsp;<button type="button" onclick="geocodeMap();"><span><?php echo $this->__('Geo Position') ?></span></button><p class="note"><?php echo $this->__('Reset the store location on Google Map when you change its address in the General Information tab.'); ?></p></div>        
+
+            <div id="map" style="display: none; height:500px;width:1016px;border:1px solid #ccc;" ></div>
+        </div>     
+
+        <?php $location = Mage::getModel('storepickup/store')->load($this->getRequest()->getParam('id')); ?>
+         
+        <script>
+            
+            
+<?php if (!$this->getRequest()->getParam('id')) { ?>
+               
+                $('zoom_level').value = 2;
+                $('store_latitude').value = 43.915464708151;
+                $('store_longitude').value = -92.16960525000002;
+                
+                var zoom = $('zoom_level').value;
+                var lat =$('store_latitude').value;
+                var long= $('store_longitude').value;
+<?php } else { ?>
+                
+                $('store_latitude').setStyle({background: 'rgb(250, 230, 180)'});
+                $('store_longitude').setStyle({background: 'rgb(250, 230, 180)'});
+                $('zoom_level').setStyle({background: 'rgb(250, 230, 180)'});
+
+                var lat = '<?php echo $location->getData('store_latitude'); ?>';
+                var long = '<?php echo $location->getData('store_longitude'); ?>';
+                var zoom = '<?php echo $location->getData('zoom_level'); ?>';
+<?php } ?>
+            $('store_latitude').value = lat;
+            $('store_longitude').value = long;
+            $('zoom_level').value = zoom;
+          Event.observe(window,'load',function(){
+              $('click-show-map').click();
+          });  
+            function showmap() {
+                $('button-reset').setStyle({display: "block"});
+                $('map').setStyle({display: "block"});
+                $('click-show-map').setStyle({display: "none"});
+                loadMap(lat, long, zoom);
+                $('click-show-map').hide();
+
+            }
+            function loadMap(lat, long, zoom) {
+
+                $('store_latitude').value = lat;
+                $('store_longitude').value = long;
+                $('zoom_level').value = zoom;
+                lat = parseFloat(lat);
+                long = parseFloat(long);
+                zoom = parseFloat(zoom);
+
+                var mapOptions = {
+                    zoom: zoom,
+                    center: new google.maps.LatLng(lat, long),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                var color = $('pin_color').value;
+                if (!color) {
+                    color = 'f75448'
+                }
+               var imageIcon= "<?php echo $location->getImageIcon()?>" ;
+            var pinImage;
+             if(imageIcon){
+                   pinImage = '<?php echo Mage::getBaseUrl('media') . 'storepickup/images/icon/'.$this->getRequest()->getParam('id').'/resize/'.$location->getImageIcon(); ?>';
+             }
+             else{
+                 var secure_s=<?php echo array('_secure'=>true);?>;
+                 pinImage = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|'+color;
+               
+            }
+                var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(lat, long),
+                    draggable: true,
+                    map: map,
+                    icon: pinImage
+                            //animation:google.maps.Animation.BOUNCE
+
+                });
+                google.maps.event.addListener(marker, 'dragend', function(event) {
+                    $('store_latitude').value = event.latLng.lat();
+                    $('store_longitude').value = event.latLng.lng();
+
+                });
+
+                google.maps.event.addListener(map, 'zoom_changed', function() {
+                    $('zoom_level').value = map.getZoom();
+
+
+                });
+
+            }
+
+            function geocodeMap() {
+                var address = $('address').value + ',' + $('city').value + ',' + $('zipcode').value + ',' + $('country').value;
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({'address': address}, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        var position = results[0].geometry.location;
+                        lat = position.lat();
+                        long = position.lng();
+                        loadMap(lat, long, zoom);
+                    }else {
+                        alert("Geocode was not successful for the following reason: " + status);
+                    }
+                });
+            }
+            
+            function resetMap() {
+            <?php if(!$this->getRequest()->getParam('id')){?>;
+                var lat = 43.915464708151;
+                var long = -92.16960525000002;
+                var zoom = 2;
+                
+            <?php }else{?>;    
+                var lat = '<?php echo $location->getData('store_latitude'); ?>';
+                var long = '<?php echo $location->getData('store_longitude'); ?>';
+                var zoom = '<?php echo $location->getData('zoom_level'); ?>';
+
+               
+            <?php }?> 
+                 loadMap(lat, long, zoom);
+            }
+            
+            loadColor_storepickup('click', 1);
+        </script>
+    </td>
+</tr>

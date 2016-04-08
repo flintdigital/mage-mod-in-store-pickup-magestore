@@ -1,0 +1,25 @@
+
+#carriers_storepickup_store_email_temp, #carriers_storepickup_admin_email_temp,#carriers_storepickup_present_text,#carriers_storepickup_css{
+	width:600px;
+	height:250px;
+}
+
+/*#carriers_storepickup_store_email_title, #carriers_storepickup_admin_emails, #carriers_storepickup_admin_email_title,#carriers_storepickup_is_filter_store,#carriers_storepickup_num_top_store,#carriers_storepickup_active_gapi,#carriers_storepickup_gkey{
+	width:600px;
+}*/
+.storepickup-td{
+    float:right;
+}
+.store-pickup-image{
+    float :left;
+    margin-right: 5px;
+}
+.storepickup-td{
+    width: 70% !important;
+}
+.store-pickup-head{
+    float: left;
+}
+.store-pickup-body{
+    float: left;
+}

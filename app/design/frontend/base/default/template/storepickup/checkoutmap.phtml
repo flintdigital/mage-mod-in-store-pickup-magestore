@@ -1,0 +1,207 @@
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?php echo Mage::getModel('storepickup/shipping_storepickup')->getConfigData('gkey'); ?>&sensor=false&libraries=places,geometry"></script>
+<?php
+$storeViewId = Mage::app()->getStore()->getStoreId();
+$currentUnit = Mage::getStoreConfig("carriers/storepickup/systemunit", Mage::app()->getStore()->getId());
+$radiusMaxValue         = Mage::getStoreConfig("carriers/storepickup/maxradius", Mage::app()->getStore()->getId());
+?>
+<script>
+    <?php echo Mage::helper('storepickup')->echoAllStoreToJson($storeViewId) ?>
+</script>
+<?php echo $this->getChildHtml('translateJs'); ?>
+<div id ="popup_outer" style="display: none;">
+
+    <div id="black_background"></div>
+    <div id="popup" class="modal-box">
+    <div class="popup-overlay" onclick="closemap()"></div>
+        <header>
+            <div class="store-button-popup1" style="display: none">
+                <button id="cancel_store1"><img src="<?php echo $this->getSkinUrl('images/magestore/storepickup/close-map.png')?>"/></button>
+                <button id="apply_store1"><span><?php echo $this->__('Apply'); ?></span></button>
+            </div>
+            <h2 class="selected_store_info"><?php echo $this->__('Store:'); ?><span id="selected_store"></span></h2>
+            <div class="store-button-popup">
+                <button style="margin-left: 10px;"   type="button" class="button" title="<?php echo $this->__('Cancel'); ?>" id="cancel_store"><span><span><?php echo $this->__('Close'); ?></span></span></button>
+                <button type="button" class="button" title="<?php echo $this->__('Apply'); ?>" id="apply_store"><span><span><?php echo $this->__('Apply'); ?></span></span></button>
+            </div>
+
+        </header>
+        <div class="modal-body row">
+            <div id="store-pickup-map-box" class="store-pickup-map-box col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <?php echo $this->getChildHtml('searchbox2'); ?>
+                <div class="store-map col-lg-12 col-md-12 col-sm-12 col-xs-12" id="store_map" style="height:100%;"></div>
+                <?php echo $this->getChildHtml('liststorebox'); ?>
+            </div>
+        </div>
+    </div>
+</div>
+<?php echo $this->getChildHtml('gmap_template'); ?>
+<script type="text/javascript">
+    // magestore.storepickup.runSetup = function() {
+    if (typeof listStoreJson === "undefined" || listStoreJson === null) {
+        listStoreJson = [];
+    }
+    var mapOptions = {
+        zoom: 5,
+        center: {
+            latitude: 54.8,
+            longitude: 15.6
+        }
+    };
+    //Options for render store html
+    var storeOptions = {
+        imageMarkerIcon: '<?php echo Mage::getBaseUrl("media") . "storepickup/images/icon/{id}/resize/{icon}"; ?>',
+        storeTemplateId: 'storeBoxTemplate',
+        listStoreBoxId: 'storepickup-list-store-box',
+        storeIdItem: 'store-item',
+        storeClassItem: 'store-item'
+    };
+    var options = {
+        googleKey: '<?php echo Mage::getModel("storepickup/shipping_storepickup")->getConfigData("gkey"); ?>',
+        mapOptions: mapOptions,
+        imageFullScreenMapSrc: '<?php echo $this->getSkinUrl("images/arrows-outside-1-128.png"); ?>',
+        radiusBarId: 'storepickup-slider-range',
+        radiusLabelId: 'storepickup-slider-amount',
+        maxRadius: '<?php echo $radiusMaxValue ?>',
+        storeOptions: storeOptions,
+        listStoreJson: listStoreJson,
+        unitSelectId: 'select_unit',
+        currentUnit: '<?php echo $currentUnit ?>',
+        allowRenderListStoreBox: true,
+        searchByDistanceInputId: 'input_search_by_distance',
+        searchByDistanceButtonId: 'btn_search_by_distance',
+        resetSearchByDistanceButtonId: 'btn_reset_distance',
+        searchByAreaInputId: 'input_search_by_area',
+        searchByAreaButtonId: 'btn_search_by_area',
+        searchOptionBoxId: 'dropdown-search-option',
+        searchMultiSelectOptionId: 'mutliSelect',
+        resetSearchByAreaButtonId: 'btn_reset_area',
+        geoYourLocationBtnId: 'widget-mylocation-button',
+        resetSearchByDateBtnId: 'btn_reset_date',
+        searchByDateInputId: 'input_search_by_date',
+        searchByDateButtonId: 'btn_search_by_date',
+        isCheckoutPage: true
+    };
+    var googleMap = new magestore.storepickup.GoogleMapManager('store_map', options);
+</script>
+
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS, array('_secure' => true)); ?>calendar/calendar-win2k-1.css"  />
+<script type="text/javascript">var Translator = new Translate([]);</script>
+<script type="text/javascript">
+    //<![CDATA[
+    enUS = {"m": {"wide": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], "abbr": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]}}; // en_US locale reference
+    Calendar._DN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; // full day names
+    Calendar._SDN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; // short day names
+    Calendar._FD = 0; // First day of the week. "0" means display Sunday first, "1" means display Monday first, etc.
+    Calendar._MN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; // full month names
+    Calendar._SMN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]; // short month names
+    Calendar._am = "AM"; // am/pm
+    Calendar._pm = "PM";
+
+    // tooltips
+    Calendar._TT = {};
+    Calendar._TT["INFO"] = "About the calendar";
+
+    Calendar._TT["ABOUT"] =
+            "DHTML Date/Time Selector\n" +
+            "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" +
+            "For latest version visit: http://www.dynarch.com/projects/calendar/\n" +
+            "Distributed under GNU LGPL. See http://gnu.org/licenses/lgpl.html for details." +
+            "\n\n" +
+            "Date selection:\n" +
+            "- Use the \xab, \xbb buttons to select year\n" +
+            "- Use the " + String.fromCharCode(0x2039) + ", " + String.fromCharCode(0x203a) + " buttons to select month\n" +
+            "- Hold mouse button on any of the above buttons for faster selection.";
+    Calendar._TT["ABOUT_TIME"] = "\n\n" +
+            "Time selection:\n" +
+            "- Click on any of the time parts to increase it\n" +
+            "- or Shift-click to decrease it\n" +
+            "- or click and drag for faster selection.";
+
+    Calendar._TT["PREV_YEAR"] = "Prev. year (hold for menu)";
+    Calendar._TT["PREV_MONTH"] = "Prev. month (hold for menu)";
+    Calendar._TT["GO_TODAY"] = "Go Today";
+    Calendar._TT["NEXT_MONTH"] = "Next month (hold for menu)";
+    Calendar._TT["NEXT_YEAR"] = "Next year (hold for menu)";
+    Calendar._TT["SEL_DATE"] = "Select date";
+    Calendar._TT["DRAG_TO_MOVE"] = "Drag to move";
+    Calendar._TT["PART_TODAY"] = ' (' + "Today" + ')';
+
+    // the following is to inform that "%s" is to be the first day of week
+    Calendar._TT["DAY_FIRST"] = "Display %s first";
+
+    // This may be locale-dependent. It specifies the week-end days, as an array
+    // of comma-separated numbers. The numbers are from 0 to 6: 0 means Sunday, 1
+    // means Monday, etc.
+    Calendar._TT["WEEKEND"] = "0,6";
+
+    Calendar._TT["CLOSE"] = "Close";
+    Calendar._TT["TODAY"] = "Today";
+    Calendar._TT["TIME_PART"] = "(Shift-)Click or drag to change value";
+
+    // date formats
+    Calendar._TT["DEF_DATE_FORMAT"] = "%b %e, %Y";
+    Calendar._TT["TT_DATE_FORMAT"] = "%B %e, %Y";
+
+    Calendar._TT["WK"] = "Week";
+    Calendar._TT["TIME"] = "Time:";
+
+    CalendarDateObject._LOCAL_TIMZEONE_OFFSET_SECONDS = -28800;
+
+    //]]>
+
+
+    var pickupDateTime = <?php echo Mage::getModel('storepickup/shipping_storepickup')->getConfigData('display_timedate'); ?>;
+    <?php
+    if(Mage::app()->getRequest()->getControllerName()=='cart')
+        echo 'pickupDateTime = false;';
+    ?>
+    var calendarDateFormat = "<?php echo Mage::helper('storepickup')->getDateFormat() ?>";
+    var disableDateUrl = '<?php echo $this->getUrl('storepickup/index/disableDate', array('_secure' => true)); ?>';
+    var changeStoreUrl = '<?php echo $this->getUrl('storepickup/index/changestore', array('_secure' => true)); ?>';
+    var selectTimeUrl = '<?php echo $this->getUrl('storepickup/index/changedate/', array('_secure' => true)); ?>';
+    var changeTimeUrl = '<?php echo $this->getUrl('storepickup/index/changetime', array('_secure' => true)); ?>';
+    var shipping_date_div = '<div id="shipping_date_div" class="storepickup-box col-lg-6 col-md-6 col-sm-6 col-xs-12">'
+            + '<label class="required" for="shipping_date"><?php echo $this->__('Shipping Date') ?> </label>'
+            + '<input name="shipping_date" id="shipping_date" value="" class="input-text required-entry form-control" readonly>'
+    var time_box = '<div id="time-box" class="storepickup-box col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display:none;">'
+            + '<label class="required" for="shipping_time"><?php echo $this->__('Shipping Time') ?> </label>'
+            + '<select id="shipping_time" name="shipping_time" class="validate-select form-control"></select>'
+            + '</div>';
+    var select_box_html = '<div class="store_selector">'
+        +'<label><?php echo $this->__('Store:') ?> </label>'
+        +'<select name="select_store_id" onchange="changestorebySelector()" id="select_store_id" class="required-entry validate-select">'
+        +'<option value="" selected=""><?php echo $this->__('Select Store:') ?></option>'
+        +'<option value="22">ABER HYDRO</option>'
+        +'</select>'
+        +'</div>';
+    var icon_src_loading_wait = '<?php echo Mage::getBaseUrl("media") . "/storepickup/images/icon/opc-ajax-loader.gif" ?>';
+    var ajax_loading_wait = '<span class="ajax-loading-wait" style="position: relative;">'+ '<img style="" src="'+ icon_src_loading_wait + '" alt="<?php echo $this->__("Loading") ?>..." title="<?php echo $this->__("Loading") ?>..." class="v-middle"> '+'<?php echo $this->__("Loading") ?>...        </span>';
+
+    var storeDefault = '<?php echo Mage::getModel("storepickup/shipping_storepickup")->getConfigData('storedefault'); ?>';
+    <?php
+        $storeShipping = Mage::getSingleton('checkout/session')->getData('storepickup_session');
+        if(isset($storeShipping['store_id'])&&$storeShipping['store_id'])
+            echo 'storeDefault = '. $storeShipping['store_id'] .';'
+    ?>
+    document.observe("dom:loaded", function() {
+        //for magento 1.9
+        if (typeof checkout != "undefined")
+            checkout.reloadProgressBlock = function(toStep) {
+                this.reloadStep(toStep);
+                if (this.syncBillingShipping) {
+                    this.syncBillingShipping = false;
+                    this.reloadStep('shipping');
+                }
+                if (toStep == 'shipping_method')
+                    this.reloadStep('shipping');
+            };
+    });
+
+    function closemap() {
+        if ($('popup'))
+            $('popup').hide();
+
+        if ($('black_background'))
+            $('black_background').hide();
+    }
+</script>

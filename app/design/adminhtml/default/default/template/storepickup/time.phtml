@@ -1,0 +1,25 @@
+<?php
+$field = $this->getField();
+if(!isset($field['type'])) $field['type']='';
+$value = explode(':', $field['data']);
+$value_hr = isset($value[0]) ? $value[0] : '00';
+$value_mi = isset($value[1]) ? $value[1] : '00';
+$html='';
+ $html .= '<select class="hour_'.$field['type'].'" id="'.$field['name'].'_hour" name="'. $field['name'] . '[]" style="width:40px">'."\n";
+    for( $i=0;$i<24;$i++ ) {
+        $hour=str_pad($i, 2, '0', STR_PAD_LEFT);
+        
+        $html.= '<option value="'.$hour.'" '. ( ($value_hr == $i) ? 'selected="selected"' : '' ) .'>' . $hour . '</option>';
+    }
+    $html.= '</select>'."\n";
+
+    $html.= '&nbsp;:&nbsp;<select class="minute_'.$field['type'].'" id="'.$field['name'].'_minute" name="'. $field['name'] . '[]"  style="width:40px">'."\n";
+    for( $i=0;$i<60;$i++ ) {
+        $hour = str_pad($i, 2, '0', STR_PAD_LEFT);
+        $html.= '<option value="'.$hour.'" '. ( ($value_mi == $i) ? 'selected="selected"' : '' ) .'>' . $hour . '</option>';
+    }
+    $html.= '</select>'."\n";
+
+       
+echo $html;
+?>

@@ -1,0 +1,14 @@
+<?php $stores = $this->getPageStore()?>
+<?php if(count($stores)):?>
+	<ul>
+	<?php foreach($stores as $store):?>
+		<li>
+			<span class="title"><?php echo $store->getStoreName() ?></span>
+			<span class="store-address"><?php echo $store->getFormatedAddress() ?></span>
+		</li>
+	<?php endforeach;?>
+	</ul>
+<?php endif; ?>
+<div id="page-nav">
+	<?php echo $this->getNavHtml() ?>
+</div>

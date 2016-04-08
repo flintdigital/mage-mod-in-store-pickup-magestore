@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <action method="addCss">
+                <styleSheet>magestore/storepickup.css</styleSheet>
+            </action>
+            <action method="addJs">
+                <script>magestore/adminhtml/storepickup.js</script>
+            </action>
+             <action method="addItem"><type>js</type><name>mage/adminhtml/wysiwyg/tiny_mce/setup.js</name></action>
+            <action method="addItem"><type>js</type><name>tiny_mce/tiny_mce.js</name></action>
+        </reference>	
+    </default>
+    <adminhtml_storepickup_tag_index>
+        <reference name="content">
+            <block type="storepickup/adminhtml_tag" name="tag" />
+        </reference>
+    </adminhtml_storepickup_tag_index>
+    <adminhtml_storepickup_store_index>
+        <reference name="content">
+            <block type="adminhtml/store_switcher" name="store_switcher" as="store_switcher">
+                <action method="setUseConfirm">
+                    <params>0</params>
+                </action>
+            </block>
+            <block type="storepickup/adminhtml_store" name="store" />
+        </reference>
+    </adminhtml_storepickup_store_index>
+    
+    <adminhtml_storepickup_store_edit>
+        <update handle="editor"/>
+        <!-- Edit by Huu Tien -->
+        <reference name="head">
+            <action method="addJs">
+                <script>magestore/storepickup/gallery.js</script>
+            </action>
+        </reference>
+        <!-- End by Huu Tien -->
+        <reference name="left">
+            <block type="adminhtml/store_switcher" name="store_switcher" before="-" />
+        </reference>
+    </adminhtml_storepickup_store_edit>
+    <adminhtml_storepickup_holiday_index>
+        <reference name="content">
+            <block type="storepickup/adminhtml_holiday" name="holiday" />
+        </reference>
+    </adminhtml_storepickup_holiday_index>
+    
+    <adminhtml_storepickup_specialday_index>
+        <reference name="content">
+            <block type="storepickup/adminhtml_specialday" name="specialday" />
+        </reference>
+    </adminhtml_storepickup_specialday_index>
+	
+    
+    <adminhtml_sales_order_create_index>
+        <reference name="head">
+            <action method="addJs">
+                <script>magestore/adminhtml/storepickup.js</script>
+            </action>		
+        </reference>
+        <reference name="shipping_method">
+            <action method="setTemplate">
+                <template>storepickup/abstract.phtml</template>
+            </action>
+        </reference>
+    </adminhtml_sales_order_create_index>
+    <!-- Rel@ted Orders -->
+    <adminhtml_storepickup_store_relatedorders>
+        <block type="core/text_list" name="root">
+            <block type="storepickup/adminhtml_store_edit_tab_relatedorders" name="storepickup.edit.tab.relatedorders"/>
+            <block type="adminhtml/widget_grid_serializer" name="related_grid_serializer">
+                <action method="initSerializerBlock">
+                    <grid_block_name>storepickup.edit.tab.relatedorders</grid_block_name>
+                    <data_callback>getSelectedRelatedOrders</data_callback>
+                    <hidden_input_name>storepickup_relatedorders</hidden_input_name><!-- -->
+                    <reload_param_name>relatedorders</reload_param_name><!-- reload goi productGrid-->
+                </action>
+                <action method="addColumnInputName">
+                    <input_name>position</input_name>
+                </action>
+            </block>
+        </block>	
+    </adminhtml_storepickup_store_relatedorders>
+	
+    <adminhtml_storepickup_store_relatedordersgrid>
+        <block type="core/text_list" name="root">
+            <block type="storepickup/adminhtml_store_edit_tab_relatedorders" name="storepickup.edit.tab.relatedorders"/>
+        </block>
+    </adminhtml_storepickup_store_relatedordersgrid>
+	
+    <adminhtml_storepickup_store_message>
+        <block type="core/text_list" name="root">
+            <block type="storepickup/adminhtml_store_edit_tab_message" name="storepickup.edit.tab.message"/>
+            <block type="adminhtml/widget_grid_serializer" name="related_grid_serializer">
+                <action method="initSerializerBlock">
+                    <grid_block_name>storepickup.edit.tab.message</grid_block_name>
+                    <data_callback>getSelectedMessage</data_callback>
+                    <hidden_input_name>storepickup_message</hidden_input_name><!-- -->
+                    <reload_param_name>message</reload_param_name><!-- reload goi productGrid-->
+                </action>
+                <action method="addColumnInputName">
+                    <input_name>position</input_name>
+                </action>
+            </block>
+        </block>
+    </adminhtml_storepickup_store_message>
+    <adminhtml_storepickup_store_messagegrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="storepickup/adminhtml_store_edit_tab_message" name="storepickup.edit.tab.message"/>
+        </block>
+    </adminhtml_storepickup_store_messagegrid>
+	
+    <adminhtml_sales_order_view>
+		<reference name="sales_order_tabs">
+            <action method="addTab">
+                <name>storepickup</name>
+                <block>storepickup/adminhtml_sales_tab_storepickup</block>
+            </action>
+        </reference>
+        <reference name="order_tab_info">
+            <action method="setTemplate">
+                <template>storepickup/sales/order/view/tab/info.phtml</template>
+            </action>
+        </reference>
+    </adminhtml_sales_order_view>
+    
+    <adminhtml_storepickup_guide_index>
+        <reference name="content">
+            <block type="storepickup/adminhtml_guide" name="storepickup_guide" as="storepickup_guide" template="storepickup/guide.phtml" />                            
+        </reference>
+    </adminhtml_storepickup_guide_index>    
+	
+</layout>

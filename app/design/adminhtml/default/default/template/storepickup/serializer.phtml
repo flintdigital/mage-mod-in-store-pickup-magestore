@@ -1,0 +1,41 @@
+<?php $_id = 'id_' . md5(microtime())  ?>
+
+<input type="hidden" name="<?php echo $this->getInputElementName() ?>" id="<?php echo $_id ?>" value="" />
+
+<?php $_gridJsObject = $this->getGridBlock()->getJsObjectName() ?>
+<script type="text/javascript">
+//create serializer controller, that will syncronize grid checkboxes with hidden input
+var magestoreObjectController = $H(<?php echo $this->getObjectsJSON() ?>);
+$('<?php echo $_id ?>').value = magestoreObjectController.toQueryString();
+
+function magestoreRegisterObject(grid, element, checked){
+
+	if(checked){
+		 magestoreObjectController.set(element.value,0);
+	}
+	else{
+		magestoreObjectController.unset(element.value);
+	}
+	
+	$('<?php echo $_id ?>').value = magestoreObjectController.toQueryString();
+	grid.reloadParams = {'<?php echo $this->getReloadParam() ?>[]':magestoreObjectController.keys()};
+}
+
+function magestoreObjectRowClick(grid, event){
+	var trElement = Event.findElement(event, 'tr');
+	var isInput   = Event.element(event).tagName == 'INPUT';
+	if(trElement){
+		var checkbox = Element.getElementsBySelector(trElement, 'input');
+		if(checkbox[0]){
+			var checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
+			<?php echo $_gridJsObject ?>.setCheckboxChecked(checkbox[0], checked);
+		}
+	}
+}
+
+<?php echo $_gridJsObject ?>.rowClickCallback =	magestoreObjectRowClick;
+
+<?php echo $_gridJsObject ?>.checkboxCheckCallback = magestoreRegisterObject;
+
+
+</script>

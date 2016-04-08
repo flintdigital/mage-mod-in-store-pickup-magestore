@@ -1,0 +1,165 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <div style="float: right;"><?php echo $this->getButtonsHtml() ?></div>
+        <h4 class="fieldset-legend <?php echo ($this->getHeaderCssClass()) ? $this->getHeaderCssClass().' icon-head' : '' ?>"><?php echo $this->getHeaderText() ?></h4>
+    </div>
+    <div class="fieldset">
+	
+        <?php echo $this->getChildHtml('', true, true) ?>
+    </div>
+</div>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?v=3.17&key=<?php echo Mage::getModel('storepickup/shipping_storepickup')->getConfigData('gkey'); ?>&sensor=false"></script>
+<script src="http://www.google.com/uds/api?file=uds.js&v=1.0" type="text/javascript"></script>
+<?php $stores = Mage::helper('storepickup')->getStoreByLocation(); ?>
+<script type="text/javascript">
+//<![CDATA[
+
+//Event.observe(document, "dom:loaded", function () { 
+//createGoogleMap();
+//function createGoogleMap(){
+	var myLatlng = new google.maps.LatLng(-34.397, 150.644);
+	var myOptions = {
+	zoom: 8,
+	center: myLatlng,
+	mapTypeId: google.maps.MapTypeId.ROADMAP
+	}
+	if($("map")){
+		map = new google.maps.Map($("map"),myOptions);
+		var bounds = new google.maps.LatLngBounds();
+		<?php 
+			foreach($stores as $store) {
+				$store=$store['info'];
+				$coordinates['lat'] = $store->getStoreLatitude();
+				$coordinates['lng'] = $store->getStoreLongitude();
+				if($coordinates['lat'] == '0.000' && $coordinates['lat'] == '0.000')
+					$coordinates = $this->getCoordinates();
+				$address = $store->getFormatedAddressforMap();
+		?>
+		var setLat = <?php echo $coordinates['lat'] ?>;
+		var setLon = <?php echo $coordinates['lng'] ?>; 
+		var storeId = <?php echo $store->getId(); ?>;
+		var store_info = '<?php echo Mage::helper('storepickup')->jsQuoteEscape($store->getStoreName()) ?><br/><?php echo str_replace("\n","",str_replace("\r","",Mage::helper('storepickup')->jsQuoteEscape($address))); ?><br/>Distance : <?php echo $store->getDistance()?> (m)' ;
+		marker_point = new google.maps.LatLng(setLat, setLon);
+		bounds.extend(marker_point);
+		var infoWindow = new google.maps.InfoWindow();
+		var infos = new Object();
+		infos['firstname'] = 'Store';
+		infos['lastname'] = '<?php echo Mage::helper('storepickup')->jsQuoteEscape($store->getStoreName()) ?>';
+		infos['street'] = '<?php echo Mage::helper('storepickup')->jsQuoteEscape($store->getAddress()) ?>';
+		infos['city'] = '<?php echo Mage::helper('storepickup')->jsQuoteEscape($store->getCity()) ?>';
+		infos['country_id'] = '<?php echo $store->getCountry() ?>';
+		infos['region'] = '<?php echo $store->getState() ?>';
+		infos['region_id'] = '<?php echo $store->getStateId() ?>';
+		infos['postcode'] = '<?php echo $store->getZipcode() ?>';
+		infos['telephone'] = '<?php echo $store->getStorePhone() ?>';
+		placeMarker(setLat,setLon,store_info,storeId,infos);
+		<?php }?>
+
+		map.fitBounds(bounds);	
+		map.setCenter(bounds.getCenter());
+		
+		//calendar
+		var Translator = new Translate([]);
+	}
+//}
+//}); 
+
+
+
+
+function placeMarker(setLat, setLon,store_info,storeId,infos) {
+	var message = "geotagged geo:lat=" + setLat + " geo:lon=" + setLon + " "; 
+	var messageRoboGEO = setLat + ";" + setLon + ""; 
+	
+	var point = new google.maps.LatLng(setLat, setLon);
+	var marker = new google.maps.Marker({
+		  position: point,
+		  map: map
+		});
+	google.maps.event.addListener(marker, 'click', function(event) {
+		changeAddress(order,infos,'order-shipping_address_fields');
+		infoWindow.setContent(store_info);
+		infoWindow.setPosition(event.latLng);
+		infoWindow.open(map);
+		$('store_id').value = storeId;
+		changestorebyMap();
+	});
+} 
+function changeAddress(order, infos, container){
+        if($('order-shipping_same_as_billing'))
+            $('order-shipping_same_as_billing').checked = false;
+	order.disableShippingAddress(false);
+	order.fillAddressFields(container, infos);
+	var data = order.serializeData(container);
+	if(order.isShippingField(container) && !order.isShippingMethodReseted){
+		order.resetShippingMethod(data);
+	}
+	else{
+		order.saveData(data);
+	}
+}
+function changestorebyMap()
+{
+	if ($('shipping_date'))
+			$('shipping_date').value ='';
+		
+		var storeId;
+		
+		storeId = $('store_id').value;
+		
+		var url = '<?php echo Mage::helper('storepickup')->getChangeStoreAdminUrl(); ?>' ;
+		url = url + 'store_id/' + storeId;
+		var request = new Ajax.Request(url,{method: 'get', onFailure: ""}); 
+		
+		if($('storepickup-box') != null)
+			$('storepickup-box').style.display = 'block';
+		if($('date-box') != null)
+			$('date-box').style.display = 'block';
+		if($('time-box') != null)	
+			$('time-box').style.display = 'block';
+			
+			//end all store mode
+		if($('curr-store') != null)
+		{
+			var curr_store_id = $('curr-store').value;
+			
+			if($('store-info-'+ curr_store_id) != null)
+			{
+				$('store-info-'+ curr_store_id).style.display = 'none';
+			}		
+			
+			if($('store-info-'+ storeId) != null)
+			{
+				$('store-info-'+ storeId).style.display = 'block';
+				$('curr-store').value = storeId;
+			}		
+		}
+} 
+//]]>
+</script>

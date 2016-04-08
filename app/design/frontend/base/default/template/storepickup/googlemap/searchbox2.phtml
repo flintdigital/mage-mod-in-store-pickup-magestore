@@ -1,0 +1,203 @@
+<?php
+    $store                  = Mage::app()->getStore()->getId();
+    $unitSystem             = Mage::helper('storepickup')->getSytemUnit();
+    $searchtabs             = explode(',',Mage::getStoreConfig("carriers/storepickup/search_tabs", $store));
+    $SearchBy               = Mage::getModel('storepickup/Source_Searchby')->toOptionArray();
+    $currentUnit           = Mage::getStoreConfig("carriers/storepickup/systemunit", $store);
+    $radiusMaxValue         = Mage::getStoreConfig("carriers/storepickup/maxradius", $store);
+    $displaySearch          = explode(',',Mage::getStoreConfig("carriers/storepickup/unit_measurement", $store));
+    //    search by distance config
+    $displaySearchDistance  = in_array(0, $displaySearch);
+    $radiusMaxValue         = ($radiusMaxValue)?$radiusMaxValue:1000;
+    // $currentUnit           = (count($currentUnit) && strlen($currentUnit[0])!== 0)  ? $currentUnit : array(0 => 'km');
+    //    search by area config
+    $displaySearchArea      = in_array(1, $displaySearch);
+    $displaySearchCheckBox          = explode(',',Mage::getStoreConfig("carriers/storepickup/searchby", $store));
+
+    $displaySearchDate      = false;
+?>
+<div id="search_box" style="background: transparent;">
+    <?php if (count($searchtabs) === 0 || in_array(0,$searchtabs)): ?>
+    <div class="search_distance_mb" id="search_distance_mb">
+        <img src="<?php echo $this->getSkinUrl('images/magestore/storepickup/search_distance.png') ?>"/>
+    </div>
+    <?php endif ?>
+
+    <?php if (in_array(1,$searchtabs)): ?>
+    <div class="search_area_mb" id="search_area_mb">
+        <img src="<?php echo $this->getSkinUrl('images/magestore/storepickup/search_area.png') ?>"/>
+    </div>
+    <div class="list-area" style="<?php echo (in_array(1,$searchtabs) && count($searchtabs) ===1) ? '':'display:none' ?>">
+        <div class="distance-expand-sub"  >
+            <input id="mb-search-area-inp" class="ml-searchbox" type="text" placeholder="<?php echo $this->__('Enter place...') ?>"/>
+            <ul>
+                <?php foreach($SearchBy as $key => $value): ?>
+                    <?php if(in_array($value['value'], $displaySearchCheckBox)): ?>
+                    <li>
+                        <input id="checkbox_store_<?php echo $value['value'] ?>" type="checkbox" value="<?php echo $value['value'] ?>"  checked="checked"/>
+                        <label for="checkbox_store_<?php echo $value['value'] ?>"><?php echo $value['label'] ?></label>
+                    </li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+    <?php endif ?>
+    <?php if (count($searchtabs) === 0 || in_array(0,$searchtabs)): ?>
+       <div class="distance-expand">
+        <div class="distance-expand-sub">
+        <input id="mb-search-distance-inp" class="ml-searchbox" type="text" placeholder="<?php echo $this->__('Enter place...') ?>"/>
+
+        <span id="range-slider-label" class="range-slider-label"><?php echo $radiusMaxValue ?> Km</span>
+        </div>
+    </div>
+    <?php endif ?>
+    <div id="search-tooltip" class="search-tooltip" style="">
+    </div>
+</div>
+<script>
+    <?php if (count($searchtabs) === 0 || in_array(0,$searchtabs)): ?>
+        $('search-tooltip').removeClassName('search-tooltip-area');
+        $('search-tooltip').addClassName('search-tooltip-distance');
+    <?php else: ?>
+        $('search-tooltip').removeClassName('search-tooltip-distance');
+        $('search-tooltip').addClassName('search-tooltip-area');
+    <?php endif; ?>
+
+    function hideAllStoreTabs(){
+        $$('.list-area, .distance-expand').invoke('hide');
+    }
+    function showListArea(){
+        $$('.distance-expand').invoke('hide');
+        $$('.list-area').invoke('show');
+        $('search-tooltip').removeClassName('search-tooltip-distance');
+        $('search-tooltip').addClassName('search-tooltip-area');
+    }
+    function showDistanceExpand(){
+        $$('.list-area').invoke('hide');
+        $$('.distance-expand').invoke('show');
+        $('search-tooltip').removeClassName('search-tooltip-area');
+        $('search-tooltip').addClassName('search-tooltip-distance');
+    }
+    function searchDistanceMbClickHalde(){
+        if($('search_distance_mb') && $('search_distance_mb').hasClassName('isActive1')){
+            $('search_distance_mb').removeClassName('isActive1');
+            hideAllStoreTabs();
+            return;
+        }
+        $$('#search_distance_mb').invoke('addClassName','isActive1');
+        $$('#search_area_mb').invoke('removeClassName','isActive1');
+        showDistanceExpand();
+        return;
+    }
+    function searchListAreaMbClickHalde(){
+        if($('search_area_mb') && $('search_area_mb').hasClassName('isActive1')){
+            $('search_area_mb').removeClassName('isActive1');
+            hideAllStoreTabs();
+            return;
+        }
+        $$('#search_distance_mb').invoke('removeClassName','isActive1');
+        $$('#search_area_mb').invoke('addClassName','isActive1');
+        showListArea();
+        return;
+    }
+
+    $$('#search_area_mb').invoke('observe','click',searchListAreaMbClickHalde);
+
+    $$('#search_distance_mb').invoke('observe','click',searchDistanceMbClickHalde);
+
+
+
+    var currentSearchType = 1;
+    // var StoreClearSearchButton = $$('.clear_search').first();
+    // var StoreSearchButton = $$('.clear_search').first();
+    $$('.search_item').each(function(el){
+       el.observe('click',function(){
+           changeSearchType(el.readAttribute('tabindex'));
+       });
+    });
+    $$('.ml-searchbox').invoke('observe','keyup',inputSearchKeyupHalde);
+    $$('.ml-searchbox').invoke('observe','focus',searchBoxFocusHalde);
+    $$('.select_multiple_table input').invoke('observe','click',areaSelectTypeChangeHalde);
+    $$('#area_selected_field, #select_multiple_two_close').invoke('observe','click',showHideselectType);
+    areaSelectTypeChangeHalde();
+    function changeSearchType(index){
+        $$('.ml-searchbox').invoke('hide');
+        $$('.search_item').invoke('hide');
+        $('searchboxinput_'+index).show();
+        currentSearchType = index;
+    }
+    function showStoreSelectTab(){
+        $$('.search_item').each(function(el){
+            if(el.readAttribute('tabindex') != currentSearchType)
+                el.show();
+        });
+        hideStoreTab();
+    }
+    function hideStoreSelectTab(){
+        $$('.search_item').invoke('hide');
+    }
+    function showStoreTab(){
+        $$('.store_tabs').each(function(el){
+            if(el.readAttribute('tabindex') == currentSearchType)
+                el.show();
+            else el.hide();
+        });
+        hideStoreSelectTab();
+    }
+    function inputSearchKeyupHalde(event){
+        var el = Event.element(event);
+        if(el.value!=''){
+            // $$('.clear_search').first().show();
+            showStoreTab();
+        }else{
+            // $$('.clear_search').first().hide();
+            hideStoreTab();
+        }
+        searchBoxFocusHalde();
+    }
+    function hideStoreTab(){
+        $$('.store_tabs').invoke('hide');
+    }
+    function StoreClearSearch(){
+        $('input.ml-searchbox').each(function(el){
+            el.value = '';
+        });
+        // $$('.clear_search').first().hide();
+    }
+
+    function areaSelectTypeChangeHalde(){
+        var str = '';
+        $$('.select_multiple_table input').each(function(el){
+           el.up('li').removeClassName('selected');
+        });
+        $$('.select_multiple_table input:checked').each(function(el,index){
+           if(index)
+                str += ', ';
+           str +=  el.value;
+           el.up('li').addClassName('selected')
+        });
+//        Edit by Tien 15/5/2015
+//        $('area_selected_field').value = str;
+//        End by Tien
+    }
+    function showHideselectType(){
+        if($$('#select_multiple_two_options ul').first().style.display=='none'){
+            $$('#select_multiple_two_options ul.select_multiple_table').first().show();
+            $$('#select_multiple_two_options .select_multiple_submit').first().show();
+        }else{
+            $$('#select_multiple_two_options ul.select_multiple_table').first().hide();
+            $$('#select_multiple_two_options .select_multiple_submit').first().hide();
+        }
+    }
+
+    function searchBoxFocusHalde(){
+        // $$('#select_multiple_two_options ul.select_multiple_table').first().show();
+        // $$('#select_multiple_two_options .select_multiple_submit').first().show();
+    }
+    function searchBoxBlurHalde(){
+        $$('#select_multiple_two_options ul.select_multiple_table').first().hide();
+        $$('#select_multiple_two_options .select_multiple_submit').first().hide();
+    }
+
+</script>
