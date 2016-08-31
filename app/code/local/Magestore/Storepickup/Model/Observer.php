@@ -23,7 +23,8 @@ class Magestore_Storepickup_Model_Observer
 
     public function update_shippingaddress($observer)
     {
-
+        $action = $observer->getEvent()->getControllerAction();
+        $shipping = $action->getRequest()->getPost('shipping', false);
         $datashipping = array();
         $storeShipping = Mage::getSingleton('checkout/session')->getData('storepickup_session');
         $storeShipping = $storeShipping['store_id'];
@@ -52,10 +53,13 @@ class Magestore_Storepickup_Model_Observer
             }
 
             $datashipping['save_in_address_book'] = 1;
+            $datashipping['use_for_shipping'] = 0;
         }
         try {
+            Mage::getSingleton('checkout/session')->setShippingAsBilling(false);
             $result = $this->saveShipping($datashipping, null);
-        } catch (Exception $e) {
+            $shipping = $action->getRequest()->setPost('shipping', $datashipping); 
+         } catch (Exception $e) {
 
         }
     }

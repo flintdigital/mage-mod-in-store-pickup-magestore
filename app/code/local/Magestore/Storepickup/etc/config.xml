@@ -62,6 +62,16 @@
                     </magestore_onestepcheckout_save_shipping>
                 </observers>
             </controller_action_predispatch_onestepcheckout_index_save_shipping>
+<!-- for MD One Step Checkout.  -->
+          <controller_action_predispatch_onestepcheckout_index_save_shipping>
+                <observers>
+                    <md_onestepcheckout_index_save_shipping>
+                        <type>singleton</type>
+                        <class>storepickup/observer</class>
+                        <method>update_shippingaddress</method>
+                    </md_onestepcheckout_index_save_shipping>
+                </observers>
+            </controller_action_predispatch_onestepcheckout_index_save_shipping>
 <!--            <sales_order_save_after>
                 <observers>
                     <magestore_storepickup_observer>
