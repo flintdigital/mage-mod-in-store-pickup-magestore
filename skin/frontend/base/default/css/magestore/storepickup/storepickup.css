@@ -1870,13 +1870,13 @@ a#pickup-captcha-link:hover{
     margin-left: 0px;
     margin-top: 0;
 }
-#selected_st_info .store-address h3{
+/*#selected_st_info .store-address h3{
     color: #454545;
     font-size: 17px;
     font-weight: 600;
     font-family: Open Sans-serif;
     padding: 15px 0;
-    margin-bottom: 0;
+    margin-bottom: 0;*/
 
 }
 #selected_st_info #time-box{
@@ -1903,9 +1903,9 @@ a#pickup-captcha-link:hover{
     width: 100%;
 }
 #selected_st_info .store-address-info{
-    background: url('../../../images/locate.png') no-repeat left center;
-    padding-left: 20px;
-    padding-top: 5px;
+    /*background: url('../../../images/locate.png') no-repeat left center;
+    padding-left: 20px;*/
+    padding-top: 15px;
 }
 #store_date_time_box #shipping_date_div{
     margin-top: 15px;
@@ -1988,9 +1988,9 @@ a#pickup-captcha-link:hover{
 }
 
 
-/**********onestepcheckout***********/
+/*/**********onestepcheckout***********/
 
-.one-step-checkout #selected_st_info h3{
+/* .one-step-checkout #selected_st_info h3{
     padding: 5px 0;
     text-align: left;
     float: left;
@@ -2055,7 +2055,7 @@ a#pickup-captcha-link:hover{
 }
 #one-step-checkout-form #store_date_time_box #shipping_date_div{
     margin-top: 10px;
-}
+}*/
 /*****style checkout onepage*********/
 .checkout-onepage-index #select_box_store_pickup{
     width: 50%;

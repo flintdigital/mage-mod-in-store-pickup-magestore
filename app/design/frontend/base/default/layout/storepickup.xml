@@ -36,9 +36,9 @@
             <action method="addJs">
                 <script>magestore/storepickup/tooltip/tooltip.js</script>
             </action>
-            <action method="addCss">
+           <!--  <action method="addCss">
                 <styleSheet>css/magestore/storepickup/storepickup_support.css</styleSheet>
-            </action>
+            </action> -->
             <action method="addCss">
                 <styleSheet>css/magestore/storepickup/storepickup.css</styleSheet>
             </action>
@@ -111,9 +111,9 @@
             <action method="addJs">
                 <script>magestore/storepickup/tooltip/tooltip.js</script>
             </action>
-            <action method="addCss">
+           <!--  <action method="addCss">
                 <styleSheet>css/magestore/storepickup/storepickup_support.css</styleSheet>
-            </action>
+            </action> -->
             <action method="addCss">
                 <styleSheet>css/magestore/storepickup/storepickup.css</styleSheet>
             </action>
