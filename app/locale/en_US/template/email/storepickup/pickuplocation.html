@@ -34,8 +34,8 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                 <td valign="top">
                     <p>
                         <strong>Hello {{htmlescape var=$order.getStoreOwnerName()}}</strong>,<br/>
-                        There is a customer that has placed an order from {{var store.getFrontendName()}} and select your store location to pickup.
-                        If you have any questions about this order please contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}" style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a> or call us at <span class="nobr">{{config path='general/store_information/phone'}}</span> Monday - Friday, 8am - 5pm PST.
+                        An order has been placed to be picked up at your location from {{var store.getFrontendName()}}.
+                        
                     </p>
                     <p>The order information is below.</p>
 

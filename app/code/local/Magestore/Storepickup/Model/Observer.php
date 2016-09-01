@@ -227,8 +227,14 @@ class Magestore_Storepickup_Model_Observer
             if ($store) {
                 $latitude = $store->getStoreLatitude();
                 $longitude = $store->getStoreLongitude();
+                $address = $store->getAddress();
+                $city = $store->getCity();
+                $state = $store->getState();
+                $zip = $store->getData('zipcode');
+                $shippingdesct .= "<br>Pickup Location<br>".$address ."<br>".$city." ".$state.",".$zip;
+
                 if ($latitude != 0 && $longitude != 0) {
-                    $shippingdesct .= '<br/><img src="http://maps.google.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&zoom=14&size=200x200&markers=color:red|label:S|' . $latitude . ',' . $longitude . '&sensor=false" /><br/>';
+                    //$shippingdesct .= '<br/><img src="http://maps.google.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&zoom=14&size=200x200&markers=color:red|label:S|' . $latitude . ',' . $longitude . '&sensor=false" /><br/>';
                 }
             }
             $order->setShippingDescription($shippingdesct)
@@ -285,8 +291,14 @@ class Magestore_Storepickup_Model_Observer
             if ($store) {
                 $latitude = $store->getStoreLatitude();
                 $longitude = $store->getStoreLongitude();
+                $address = $store->getAddress();
+                $city = $store->getCity();
+                $state = $store->getState();
+                $zip = $store->getData('zipcode');
+                $shippingdesct .= "<br>Pickup Location<br>".$address ."<br>".$city." ".$state.",".$zip;
+
                 if ($latitude != 0 && $longitude != 0) {
-                    $shippingdesct .= '<br/><img src="http://maps.google.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&zoom=14&size=200x200&markers=color:red|label:S|' . $latitude . ',' . $longitude . '&sensor=false" /><br/>';
+                    //$shippingdesct .= '<br/><img src="http://maps.google.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&zoom=14&size=200x200&markers=color:red|label:S|' . $latitude . ',' . $longitude . '&sensor=false" /><br/>';
                 }
             }
 
