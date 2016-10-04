@@ -1,6 +1,8 @@
 # mage-mod-in-store-pickup-magestore
 Magento 1.9 Instore Pickup Module by MageStore: http://www.magestore.com/magento-store-pickup-extension.html
 
+# DO NOT MERGE DIRECTLY FROM THE FORKED REPO! 
+
 ### Installation
 `modgit add mage-mod-in-store-pickup-magestore git@github.com:flintdigital/mage-mod-in-store-pickup-magestore.git`
 
