@@ -10,7 +10,7 @@
 }
 .modal-box {
     position: fixed;
-    z-index: 9999;
+    z-index: 99999;
     top: 6%;
     left: 6%;
     width: 87%;
