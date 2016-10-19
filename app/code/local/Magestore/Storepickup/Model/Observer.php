@@ -31,7 +31,7 @@ class Magestore_Storepickup_Model_Observer
         $shippingMethod = Mage::getSingleton('checkout/session')->getQuote()->getShippingAddress()->getShippingMethod();
         if (isset($storeShipping) && $storeShipping && ($shippingMethod == 'storepickup_storepickup')) {
             $store = Mage::getModel('storepickup/store')->load($storeShipping);
-            $datashipping['firstname'] = Mage::helper('storepickup')->__('Store');
+            $datashipping['firstname'] = Mage::helper('storepickup')->__('');
             $datashipping['lastname'] = $store->getData('store_name');
             $datashipping['street'][0] = $store->getData('address');
             $datashipping['city'] = $store->getCity();
@@ -376,7 +376,7 @@ class Magestore_Storepickup_Model_Observer
 
         if (isset($datashipping['store_id']) && $datashipping['store_id']) {
             $store = Mage::getModel('storepickup/store')->load($datashipping['store_id']);
-            $datashipping['firstname'] = Mage::helper('storepickup')->__('Store');
+            $datashipping['firstname'] = Mage::helper('storepickup')->__('');
             $datashipping['lastname'] = $store->getData('store_name');
             $datashipping['street'][0] = $store->getData('address');
             $datashipping['city'] = $store->getCity();
