@@ -1251,4 +1251,47 @@ class Magestore_Storepickup_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $array;
     }
+
+
+
+    /*
+     *
+     *
+     * BEGIN Fix for SUPEE 8788 incompatibility issue
+     * http://magento.stackexchange.com/questions/142006/issue-in-admin-panel-after-supee-patch-8788-installation/142013#142013
+     *
+     *
+     * */
+    protected function _isNoFlashUploader()
+    {
+        return class_exists("Mage_Uploader_Block_Abstract");
+    }
+
+    public function getFlowMin()
+    {
+        return $this->_isNoFlashUploader() ? "lib/uploader/flow.min.js" : null;
+    }
+
+    public function getFustyFlow()
+    {
+        return $this->_isNoFlashUploader() ? "lib/uploader/fusty-flow.js" : null;
+    }
+
+    public function getFustyFlowFactory()
+    {
+        return $this->_isNoFlashUploader() ? "lib/uploader/fusty-flow-factory.js" : null;
+    }
+
+    public function getAdminhtmlUploaderInstance()
+    {
+        return $this->_isNoFlashUploader() ? "mage/adminhtml/uploader/instance.js" : null;
+    }
+    /*
+     *
+     *
+     * END Fix for SUPEE 8788 incompatibility issue
+     * http://magento.stackexchange.com/questions/142006/issue-in-admin-panel-after-supee-patch-8788-installation/142013#142013
+     *
+     *
+     * */
 }

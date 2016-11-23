@@ -17,17 +17,47 @@ class Magestore_Storepickup_Block_Adminhtml_Gallery_Content extends Mage_Adminht
         $this->setChild('uploader', $this->getLayout()->createBlock('adminhtml/media_uploader')
         );
 
-        $this->getUploader()->getConfig()
-                ->setUrl(Mage::getModel('adminhtml/url')->addSessionParam()->getUrl('*/adminhtml_gallery/upload'))
+        /*
+         *
+         *
+         * BEGIN Fix for SUPEE 8788 incompatibility issue
+         * http://magento.stackexchange.com/questions/142006/issue-in-admin-panel-after-supee-patch-8788-installation/142013#142013
+         *
+         *
+         * */
+        $url = Mage::getModel('adminhtml/url')->addSessionParam()->getUrl('*/adminhtml_gallery/upload');
+
+        if (class_exists("Mage_Uploader_Block_Abstract")) {
+            // PATCH SUPEE-8788 or Magento 1.9.3
+            $this->getUploader()->getUploaderConfig()
+                ->setFileParameterName('image')
+                ->setTarget($url);
+
+            $browseConfig = $this->getUploader()->getButtonConfig();
+            $browseConfig
+                ->setAttributes(
+                    array("accept"  =>  $browseConfig->getMimeTypesByExtensions('gif, png, jpeg, jpg'))
+                );
+        } else {
+            $this->getUploader()->getConfig()
+                ->setUrl($url)
                 ->setFileField('image')
                 ->setFilters(array(
                     'images' => array(
                         'label' => Mage::helper('adminhtml')->__('Images (.gif, .jpg, .png)'),
-                        'files' => array('*.gif', '*.jpg', '*.jpeg', '*.png')
+                        'files' => array('*.gif', '*.jpg','*.jpeg', '*.png')
                     )
-        ));
+                ));
+        }
 
-
+        /*
+         *
+         *
+         * END Fix for SUPEE 8788 incompatibility issue
+         * http://magento.stackexchange.com/questions/142006/issue-in-admin-panel-after-supee-patch-8788-installation/142013#142013
+         *
+         *
+         * */
 
         return parent::_prepareLayout();
     }

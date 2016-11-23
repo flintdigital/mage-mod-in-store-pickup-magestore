@@ -5,6 +5,18 @@
             <action method="addCss">
                 <styleSheet>magestore/storepickup.css</styleSheet>
             </action>
+            
+            <!-- BEGIN Fix for SUPEE 8788 incompatibility issue-->
+            <!-- http://magento.stackexchange.com/questions/142006/issue-in-admin-panel-after-supee-patch-8788-installation/142013#142013-->
+
+            <action method="addJs"><file helper="storepickup/getFlowMin" /></action>
+            <action method="addJs"><file helper="storepickup/getFustyFlow" /></action>
+            <action method="addJs"><file helper="storepickup/getFustyFlowFactory" /></action>
+            <action method="addJs"><file helper="storepickup/getAdminhtmlUploaderInstance" /></action>
+
+            <!-- END Fix for SUPEE 8788 incompatibility issue-->
+            <!-- http://magento.stackexchange.com/questions/142006/issue-in-admin-panel-after-supee-patch-8788-installation/142013#142013-->
+
             <action method="addJs">
                 <script>magestore/adminhtml/storepickup.js</script>
             </action>

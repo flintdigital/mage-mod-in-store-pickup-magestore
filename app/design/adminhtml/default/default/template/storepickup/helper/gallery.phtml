@@ -61,6 +61,34 @@ $_block = $this;
 <input type="hidden" id="<?php echo $_block->getHtmlId() ?>_save" name="storepickup_images" value="<?php echo $_block->escapeHtml($_block->getImagesJson()) ?>" />
 <input type="hidden" id="<?php echo $_block->getHtmlId() ?>_save_image" name="storepickup_values" value="<?php echo $_block->escapeHtml($_block->getImagesValuesJson()) ?>" />
 <script type="text/javascript">
-var <?php echo $_block->getJsObjectName(); ?> = new Storepickup.Gallery('<?php echo $_block->getHtmlId() ?>', <?php echo $_block->getUploader()->getJsObjectName() ?>, <?php echo $_block->getImageTypesJson() ?>);
+<?php
+/*
+ *
+ *
+ * BEGIN Fix for SUPEE 8788 incompatibility issue
+ * http://magento.stackexchange.com/questions/142006/issue-in-admin-panel-after-supee-patch-8788-installation/142013#142013
+ *
+ *
+ * */
 
+
+
+if (class_exists("Mage_Uploader_Block_Abstract")): ?>
+var <?php echo $_block->getJsObjectName(); ?> = new Product.Gallery('<?php echo $_block->getHtmlId() ?>', <?php echo $_block->getImageTypesJson() ?>);
+<?php else: ?>
+var <?php echo $_block->getJsObjectName(); ?> = new Product.Gallery('<?php echo $_block->getHtmlId() ?>', <?php if ($_block->getElement()->getReadonly()):?>null<?php else:?><?php echo $_block->getUploader()->getJsObjectName() ?><?php endif;?>, <?php echo $_block->getImageTypesJson() ?>);
+<?php endif;
+
+
+
+
+/*
+ *
+ *
+ * END Fix for SUPEE 8788 incompatibility issue
+ * http://magento.stackexchange.com/questions/142006/issue-in-admin-panel-after-supee-patch-8788-installation/142013#142013
+ *
+ *
+ * */
+?>
 </script>
